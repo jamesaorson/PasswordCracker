@@ -12,7 +12,7 @@ namespace PasswordCracker {
         static void Main(string[] args) {
             Dictionary<string, string> dict = new Dictionary<string, string>();
             
-            string[] words = File.ReadAllText("bible.txt").Split((string[])null,
+            string[] words = File.ReadAllText("../../bible.txt").Split((string[])null,
                              StringSplitOptions.RemoveEmptyEntries);
             
             for (int i = 0; i < words.Length; ++i) {
@@ -22,19 +22,15 @@ namespace PasswordCracker {
                 }
             }
 
-            Console.WriteLine("done with " + dict.Count() + " words");
+            Console.WriteLine("done with " + dict.Count() + " words. ");
+            Console.Read();
         }
 
         private static string hash(string input) {
             byte[] inputBytes = Encoding.ASCII.GetBytes(input);
             byte[] hashBytes = md5.ComputeHash(inputBytes);
 
-            StringBuilder hash = new StringBuilder();
-
-            for (int i = 0; i < hashBytes.Length; ++i) {
-                hash.Append(hashBytes[i].ToString("x2"));
-            }
-            return hash.ToString();
+            return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
         }
     }
 }
