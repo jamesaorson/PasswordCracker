@@ -20,10 +20,10 @@ namespace PasswordCracker {
 
         static void Main(string[] args) {
             //Splits bible.txt into a string[] of individual lowercase tokens.
-            string[] lowerDictWords = File.ReadAllText("../../bible.txt")
+            string[] lowerDictWords = File.ReadAllText(/*"../../bible.txt"*/"bible.txt")
                                 .ToLower().Split((string[])null,
                                 StringSplitOptions.RemoveEmptyEntries);
-            string[] upperDictWords = File.ReadAllText("../../bible.txt")
+            string[] upperDictWords = File.ReadAllText(/*"../../bible.txt"*/"bible.txt")
                                . ToUpper().Split((string[])null,
                                 StringSplitOptions.RemoveEmptyEntries);
             string[] capitalizedDictWords;
@@ -43,12 +43,12 @@ namespace PasswordCracker {
             //Hash and insert words from bible.txt
             lowerDict = hash(lowerDictWords, lowerDict);
             upperDict = hash(upperDictWords, upperDict);
-            capitalizedDict = hash(capitalizedDictWords, lowerDict);
+            capitalizedDict = hash(capitalizedDictWords, capitalizedDict);
 
             Console.WriteLine("done with " + lowerDict.Count() + " words. ");
 
             StringReader reader = new StringReader(
-                                  File.ReadAllText("../../pa4hashes.txt"));
+                                  File.ReadAllText(/*"../../pa4hashes.txt"*/"pa4hashes.txt"));
             string result = "";
 
             while (reader.Peek() != -1) {
@@ -71,7 +71,7 @@ namespace PasswordCracker {
                 }
             }
 
-            File.WriteAllText("../../crackedPasswords.txt", result);
+            File.WriteAllText(/*"../../crackedPasswords.txt*/"crackedPasswords.txt", result);
             Console.WriteLine("Wrote the file");
             
             Console.Read();
