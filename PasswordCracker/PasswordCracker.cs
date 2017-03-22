@@ -7,29 +7,45 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PasswordCracker {
-    static class PasswordCracker {
+    partial class PasswordCracker {
         //Holds dictionary of words in format of <hash, word>.
-        private static Dictionary<string, string> dict
-                 = new Dictionary<string, string>();
+        private static Dictionary<string, string> lowerDict
+            = new Dictionary<string, string>();
+        private static Dictionary<string, string> upperDict
+            = new Dictionary<string, string>();
+        private static Dictionary<string, string> capitalizedDict
+            = new Dictionary<string, string>();
         //Performs MD5 hashing.
         private static MD5 md5 = MD5.Create();
 
         static void Main(string[] args) {
             //Splits bible.txt into a string[] of individual lowercase tokens.
-            string[] dictWords = File.ReadAllText("../../bible.txt")
+            string[] lowerDictWords = File.ReadAllText("../../bible.txt")
                                 .ToLower().Split((string[])null,
                                 StringSplitOptions.RemoveEmptyEntries);
-            
+            string[] upperDictWords = File.ReadAllText("../../bible.txt")
+                               . ToUpper().Split((string[])null,
+                                StringSplitOptions.RemoveEmptyEntries);
+            string[] capitalizedDictWords;
+
             //Returns the array with duplicates removed (For program
             //speed purposes).
-            dictWords = dictWords.Distinct().ToArray();
+            lowerDictWords = lowerDictWords.Distinct().ToArray();
+            capitalizedDictWords = new string[lowerDictWords.Length];
+            upperDictWords = upperDictWords.Distinct().ToArray();
 
-            //Hash and insert words from bible.txt
-            for (int i = 0; i < dictWords.Length; ++i) {
-                dict.Add(hash(dictWords[i]), dictWords[i]);
+            for (int i = 0; i < lowerDictWords.Length; ++i) {
+                capitalizedDictWords[i] = ToTitleCase(lowerDictWords[i]);
             }
 
-            Console.WriteLine("done with " + dict.Count() + " words. ");
+            capitalizedDictWords = capitalizedDictWords.Distinct().ToArray();
+
+            //Hash and insert words from bible.txt
+            lowerDict = hash(lowerDictWords, lowerDict);
+            upperDict = hash(upperDictWords, upperDict);
+            capitalizedDict = hash(capitalizedDictWords, lowerDict);
+
+            Console.WriteLine("done with " + lowerDict.Count() + " words. ");
 
             StringReader reader = new StringReader(
                                   File.ReadAllText("../../pa4hashes.txt"));
@@ -51,7 +67,7 @@ namespace PasswordCracker {
                     string salt = line.Substring(firstColonPos + 1,
                                                  secondColonPos);
 
-                    result += guessPassword(passHash, salt) + "\n";
+                    result += $"{guessPassword(passHash, salt)}\n";
                 }
             }
 
@@ -59,37 +75,6 @@ namespace PasswordCracker {
             Console.WriteLine("Wrote the file");
             
             Console.Read();
-        }
-
-        private static string hash(string input) {
-            //Converts input to a byte array.
-            byte[] inputBytes = Encoding.ASCII.GetBytes(input);
-            byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-            //Converts bytes to a hex string and fixes formatting.
-            return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
-        }
-
-        private static string guessPassword(string hash, string salt) {
-            if (String.IsNullOrEmpty(salt)) {
-                string temp = dictionarySearch(hash);
-
-                if (!String.IsNullOrEmpty(temp)) {
-                    return temp;
-                }
-            }
-
-            //Complicated stuff
-
-            return hash + " " + salt;
-        }
-
-        private static string dictionarySearch(string hash) {
-            if (dict.ContainsKey(hash)) {
-                return dict[hash];
-            }
-
-            return null;
         }
     }
 }
