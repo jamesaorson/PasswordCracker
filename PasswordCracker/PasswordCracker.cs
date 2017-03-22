@@ -71,8 +71,25 @@ namespace PasswordCracker {
         }
 
         private static string guessPassword(string hash, string salt) {
+            if (String.IsNullOrEmpty(salt)) {
+                string temp = dictionarySearch(hash);
+
+                if (!String.IsNullOrEmpty(temp)) {
+                    return temp;
+                }
+            }
+
+            //Complicated stuff
 
             return hash + " " + salt;
+        }
+
+        private static string dictionarySearch(string hash) {
+            if (dict.ContainsKey(hash)) {
+                return dict[hash];
+            }
+
+            return null;
         }
     }
 }
