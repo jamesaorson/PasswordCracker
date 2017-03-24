@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,16 +10,9 @@ namespace PasswordCracker
 {
     partial class PasswordCracker {
         private static Dictionary<string, string> hashIntoDict(string[] input, Dictionary<string, string> dict) {
-            //Converts input to a byte array.
-/*            byte[] inputBytes;
-            byte[] hashBytes;*/
-
             for (int i = 0; i < input.Length; ++i) {
+                //Inserts hashes into dictionary.
                 dict[hash(input[i])] = input[i];
-/*                inputBytes = Encoding.ASCII.GetBytes(input[i]);
-                hashBytes = md5.ComputeHash(inputBytes);
-
-                dict.Add(BitConverter.ToString(hashBytes).Replace("-", "").ToLower(), input[i]);*/
             }
 
             //Converts bytes to a hex string and fixes formatting.
@@ -60,11 +54,41 @@ namespace PasswordCracker
                 return capitalizedDict[hash];
             }
 
-            return null;
+            return String.Empty;
         }
 
-        public static string ToTitleCase(string str) {
-            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
+        private static string specialCharacterReplace(string input) {
+            
+
+            return String.Empty;
+        }
+
+        public static string ToTitleCase(string s) {
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s.ToLower());
+        }
+
+        public static Dictionary<string, string> initReplaceDict() {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+
+            dict["a"] = "@";
+            dict["A"] = "@";
+            dict["e"] = "3";
+            dict["E"] = "3";
+            dict["i"] = "1";
+            dict["I"] = "1";
+            dict["l"] = "1";
+            dict["L"] = "1";
+            dict["o"] = "0";
+            dict["O"] = "0";
+            dict["s"] = "$";
+            dict["S"] = "$";
+
+            return dict;
+        }
+
+        public static string[] readAndSplitFile(string filename) {
+            return File.ReadAllText(filename).Split((string[])null,
+                StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }
