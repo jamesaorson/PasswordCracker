@@ -20,12 +20,14 @@ namespace PasswordCracker {
 
         static void Main(string[] args) {
             //Splits bible.txt into a string[] of individual lowercase tokens.
-            string[] lowerDictWords = File.ReadAllText(/*"../../bible.txt"*/"bible.txt")
-                                .ToLower().Split((string[])null,
-                                StringSplitOptions.RemoveEmptyEntries);
-            string[] upperDictWords = File.ReadAllText(/*"../../bible.txt"*/"bible.txt")
-                               . ToUpper().Split((string[])null,
-                                StringSplitOptions.RemoveEmptyEntries);
+            string[] lowerDictWords = File
+                .ReadAllText(/*"../../bible.txt"*/"bible.txt")
+                .ToLower().Split((string[])null,
+                StringSplitOptions.RemoveEmptyEntries);
+            string[] upperDictWords = File
+                .ReadAllText(/*"../../bible.txt"*/"bible.txt")
+                .ToUpper().Split((string[])null,
+                StringSplitOptions.RemoveEmptyEntries);
             string[] capitalizedDictWords;
 
             //Returns the array with duplicates removed (For program
@@ -41,14 +43,14 @@ namespace PasswordCracker {
             capitalizedDictWords = capitalizedDictWords.Distinct().ToArray();
 
             //Hash and insert words from bible.txt
-            lowerDict = hash(lowerDictWords, lowerDict);
-            upperDict = hash(upperDictWords, upperDict);
-            capitalizedDict = hash(capitalizedDictWords, capitalizedDict);
+            lowerDict = hashIntoDict(lowerDictWords, lowerDict);
+            upperDict = hashIntoDict(upperDictWords, upperDict);
+            capitalizedDict = hashIntoDict(capitalizedDictWords, capitalizedDict);
 
             Console.WriteLine("done with " + lowerDict.Count() + " words. ");
 
             StringReader reader = new StringReader(
-                                  File.ReadAllText(/*"../../pa4hashes.txt"*/"pa4hashes.txt"));
+                File.ReadAllText(/*"../../pa4hashes.txt"*/"pa4hashes.txt"));
             string result = "";
 
             while (reader.Peek() != -1) {

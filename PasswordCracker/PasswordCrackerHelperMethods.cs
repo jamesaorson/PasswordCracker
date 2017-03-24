@@ -8,20 +8,31 @@ using System.Threading.Tasks;
 namespace PasswordCracker
 {
     partial class PasswordCracker {
-        private static Dictionary<string, string> hash(string[] input, Dictionary<string, string> dict) {
+        private static Dictionary<string, string> hashIntoDict(string[] input, Dictionary<string, string> dict) {
             //Converts input to a byte array.
-            byte[] inputBytes;
-            byte[] hashBytes;
+/*            byte[] inputBytes;
+            byte[] hashBytes;*/
 
             for (int i = 0; i < input.Length; ++i) {
-                inputBytes = Encoding.ASCII.GetBytes(input[i]);
+                dict[hash(input[i])] = input[i];
+/*                inputBytes = Encoding.ASCII.GetBytes(input[i]);
                 hashBytes = md5.ComputeHash(inputBytes);
 
-                dict.Add(BitConverter.ToString(hashBytes).Replace("-", "").ToLower(), input[i]);
+                dict.Add(BitConverter.ToString(hashBytes).Replace("-", "").ToLower(), input[i]);*/
             }
 
             //Converts bytes to a hex string and fixes formatting.
             return dict;
+        }
+
+        private static string hash(string input) {
+            byte[] inputBytes;
+            byte[] hashBytes;
+
+            inputBytes = Encoding.ASCII.GetBytes(input);
+            hashBytes = md5.ComputeHash(inputBytes);
+
+            return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
         }
 
         private static string guessPassword(string hash, string salt) {
