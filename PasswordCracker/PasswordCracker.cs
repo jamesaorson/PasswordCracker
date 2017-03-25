@@ -25,12 +25,12 @@ namespace PasswordCracker {
         private static MD5 md5 = MD5.Create();
 
         static void Main(string[] args) {
-            //string bibleFile = "../../bible.txt"; //vs
-            //string hashesFile = "../../pa4hashes.txt"; //vs
-            //string crackedPasswordsFile = "../../crackedPasswords.txt"; //vs
-            string bibleFile = "bible.txt";       //Linux
-            string hashesFile = "pa4hashes.txt";    //Linux
-            string crackedPasswordsFile = "crackedPasswords.txt";  //Linux
+            string bibleFile = "../../bible.txt"; //vs
+            string hashesFile = "../../pa4hashes.txt"; //vs
+            string crackedPasswordsFile = "../../crackedPasswords.txt"; //vs
+            //string bibleFile = "bible.txt";       //Linux
+            //string hashesFile = "pa4hashes.txt";    //Linux
+            //string crackedPasswordsFile = "crackedPasswords.txt";  //Linux
 
             letterReplaceDict = initReplaceDict();
 
@@ -60,34 +60,17 @@ namespace PasswordCracker {
 
             Console.WriteLine("done with " + lowerDict.Count() + " words. ");
 
+            string result = "";
+            var passwords = parseHashesFile(hashesFile);
             var reader = new StringReader(
                 File.ReadAllText(hashesFile));
-            string result = "";
 
-            while (reader.Peek() != -1) {
-                string line = reader.ReadLine();
-
-                if (line.Contains(":")) {
-                    int firstColonPos = line.IndexOf(':');
-                    int secondColonPos = line.Substring(firstColonPos + 1)
-                                        .IndexOf(':');
-
-                    result += line.Substring(0, firstColonPos) + ": ";
-
-                    //Hash of the user's password.
-                    string passHash = line.Substring(firstColonPos
-                                                     + secondColonPos + 2);
-                    string salt = line.Substring(firstColonPos + 1,
-                                                 secondColonPos);
-
-                    result += $"{guessPassword(passHash, salt)}\n";
-                }
+            foreach(var pass in passwords) {
+                result += $"{pass.Name}: {guessPassword(pass.HashString, pass.Salt)}\n";
             }
 
             File.WriteAllText(crackedPasswordsFile, result);
             Console.WriteLine("Wrote the file");
-            
-            Console.Read();
         }
     }
 }
