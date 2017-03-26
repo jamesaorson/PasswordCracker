@@ -16,8 +16,10 @@ namespace PasswordCracker {
         private static string[] dictWords;
         //Performs MD5 hashing.
         private static MD5 md5 = MD5.Create();
+        private static DateTime start;
 
         static void Main(string[] args) {
+            start = DateTime.Now;
             //string bibleFile = "../../bible.txt"; //vs
             //string hashesFile = "../../pa4hashes.txt"; //vs
             //string crackedPasswordsFile = "../../crackedPasswords.txt"; //vs
@@ -51,7 +53,7 @@ namespace PasswordCracker {
             }
 
             File.WriteAllText(crackedPasswordsFile, result);
-            Console.WriteLine("Wrote the file");
+            Console.WriteLine($"Wrote the file in {DateTime.Now - start}");
         }
     }
 }

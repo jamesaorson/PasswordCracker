@@ -160,13 +160,16 @@ namespace PasswordCracker {
         private static List<Password> checkAppended(string word,
                                                     List<Password> passwords) {
             StringBuilder check = new StringBuilder(word);
+            check.Append(" ");
+            string hashCheck;
 
-            foreach (var pass in passwords) {
-                if (String.IsNullOrEmpty(pass.Salt)) {
-                    for (int i = 32; i < 127; ++i) {
-                        check[check.Length - 1] = (char) i;
+            for (int i = 32; i < 127; ++i) {
+                check[check.Length - 1] = (char) i;
+                hashCheck = hash(check.ToString());    
 
-                        if (hash(check.ToString()).Equals(pass.HashString)) {
+                foreach (var pass in passwords) {
+                    if (String.IsNullOrEmpty(pass.Salt)) {
+                        if (hashCheck.Equals(pass.HashString)) {
                             pass.Pass = check.ToString();
                         }
                     }
