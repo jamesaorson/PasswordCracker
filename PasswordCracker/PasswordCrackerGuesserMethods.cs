@@ -143,10 +143,11 @@ namespace PasswordCracker {
                                             string salt) {
             StringBuilder result = new StringBuilder(input);
             result.Append(" ");
+            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '#', '?' };
 
             if (!String.IsNullOrEmpty(salt)) {
-                for (int i = 32; i < 127; ++i) {
-                    result[result.Length - 1] = (char) i;
+                foreach (char c in charSet) {
+                    result[result.Length - 1] = c;
                 
                     if (hash($"{result.ToString()}{salt}").Equals(hashString)) {
                         return $"{result.ToString()}";
@@ -162,15 +163,17 @@ namespace PasswordCracker {
             StringBuilder check = new StringBuilder(word);
             check.Append(" ");
             string hashCheck;
-
-            for (int i = 32; i < 127; ++i) {
-                check[check.Length - 1] = (char) i;
+            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '#', '?' };
+            
+            foreach (char c in charSet) {
+                check[check.Length - 1] = c;
                 hashCheck = hash(check.ToString());    
 
                 foreach (var pass in passwords) {
                     if (String.IsNullOrEmpty(pass.Salt)) {
                         if (hashCheck.Equals(pass.HashString)) {
                             pass.Pass = check.ToString();
+                            break;
                         }
                     }
                 }
