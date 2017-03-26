@@ -9,18 +9,11 @@ using System.Threading.Tasks;
 namespace PasswordCracker {
     partial class PasswordCracker {
         //Holds dictionary of words in format of <hash, word>.
-        private static Dictionary<string, string> lowerDict
-            = new Dictionary<string, string>();
-        private static Dictionary<string, string> upperDict
-            = new Dictionary<string, string>();
-        private static Dictionary<string, string> capitalizedDict
+        private static Dictionary<string, string> dict
             = new Dictionary<string, string>();
         private static Dictionary<char, char> letterReplaceDict
             = new Dictionary<char, char>();
-        private static string[] originalDictWords;
-        private static string[] lowerDictWords;
-        private static string[] upperDictWords;
-        private static string[] capitalizedDictWords;
+        private static string[] dictWords;
         //Performs MD5 hashing.
         private static MD5 md5 = MD5.Create();
 
@@ -35,38 +28,26 @@ namespace PasswordCracker {
             letterReplaceDict = initReplaceDict();
 
             //Splits bible.txt into a string[] of individual lowercase tokens.
-            originalDictWords = readAndSplitFile(bibleFile);
-            lowerDictWords = readAndSplitFile(bibleFile);
-            upperDictWords = readAndSplitFile(bibleFile);
+            dictWords = readAndSplitFile(bibleFile);
 
             //Returns the array with duplicates removed (For program
             //speed purposes).
-            originalDictWords = originalDictWords.Distinct().ToArray();
-            lowerDictWords = lowerDictWords.Distinct().ToArray();
-            upperDictWords = upperDictWords.Distinct().ToArray();
-
-            capitalizedDictWords = new string[lowerDictWords.Length];
-
-            for (int i = 0; i < lowerDictWords.Length; ++i) {
-                capitalizedDictWords[i] = ToTitleCase(lowerDictWords[i]);
-            }
-
-            capitalizedDictWords = capitalizedDictWords.Distinct().ToArray();
+            dictWords = dictWords.Distinct().ToArray();
 
             //Hash and insert words from bible.txt
-            lowerDict = hash(lowerDictWords, lowerDict);
-            upperDict = hash(upperDictWords, upperDict);
-            capitalizedDict = hash(capitalizedDictWords, capitalizedDict);
+            dict = hash(dictWords, dict);
 
-            Console.WriteLine("done with " + lowerDict.Count() + " words. ");
+            Console.WriteLine("done with " + dict.Count() + " words. ");
 
             string result = "";
             var passwords = parseHashesFile(hashesFile);
             var reader = new StringReader(
                 File.ReadAllText(hashesFile));
 
+            passwords = guessPassword(passwords);
+
             foreach(var pass in passwords) {
-                result += $"{pass.Name}: {guessPassword(pass.HashString, pass.Salt)}\n";
+                result += $"{pass.Name}: {pass.Pass} {pass.Salt}\n";
             }
 
             File.WriteAllText(crackedPasswordsFile, result);
