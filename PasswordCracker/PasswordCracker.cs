@@ -18,12 +18,12 @@ namespace PasswordCracker {
         private static MD5 md5 = MD5.Create();
 
         static void Main(string[] args) {
-            string bibleFile = "../../bible.txt"; //vs
-            string hashesFile = "../../pa4hashes.txt"; //vs
-            string crackedPasswordsFile = "../../crackedPasswords.txt"; //vs
-            //string bibleFile = "bible.txt";       //Linux
-            //string hashesFile = "pa4hashes.txt";    //Linux
-            //string crackedPasswordsFile = "crackedPasswords.txt";  //Linux
+            //string bibleFile = "../../bible.txt"; //vs
+            //string hashesFile = "../../pa4hashes.txt"; //vs
+            //string crackedPasswordsFile = "../../crackedPasswords.txt"; //vs
+            string bibleFile = "bible.txt";       //Linux
+            string hashesFile = "pa4hashes.txt";    //Linux
+            string crackedPasswordsFile = "crackedPasswords.txt";  //Linux
 
             letterReplaceDict = initReplaceDict();
 

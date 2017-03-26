@@ -56,6 +56,10 @@ namespace PasswordCracker {
                         }
                     }
                 }
+
+                passwords = checkAppended(word, passwords);
+                passwords = checkAppended(word.ToUpper(), passwords);
+                passwords = checkAppended(ToTitleCase(word), passwords);
             }
 
             return passwords;
@@ -135,19 +139,41 @@ namespace PasswordCracker {
             return result.ToString();
         }
 
-        private static string checkAppended(string input, string hashString, string salt) {
+        private static string checkAppended(string input, string hashString,
+                                            string salt) {
             StringBuilder result = new StringBuilder(input);
             result.Append(" ");
 
-            for (int i = 32; i < 127; ++i) {
-                result[result.Length - 1] = (char) i;
+            if (!String.IsNullOrEmpty(salt)) {
+                for (int i = 32; i < 127; ++i) {
+                    result[result.Length - 1] = (char) i;
                 
-                if (hash($"{result.ToString()}{salt}").Equals(hashString)) {
-                    return $"{result.ToString()}";
+                    if (hash($"{result.ToString()}{salt}").Equals(hashString)) {
+                        return $"{result.ToString()}";
+                    }
                 }
             }
 
             return String.Empty;
+        }
+
+        private static List<Password> checkAppended(string word,
+                                                    List<Password> passwords) {
+            StringBuilder check = new StringBuilder(word);
+
+            foreach (var pass in passwords) {
+                if (String.IsNullOrEmpty(pass.Salt)) {
+                    for (int i = 32; i < 127; ++i) {
+                        check[check.Length - 1] = (char) i;
+
+                        if (hash(check.ToString()).Equals(pass.HashString)) {
+                            pass.Pass = check.ToString();
+                        }
+                    }
+                }
+            }
+
+            return passwords;
         }
     }
 }
