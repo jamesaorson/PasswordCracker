@@ -16,6 +16,7 @@ namespace PasswordCracker {
 
                     if (hash(temp).Equals(pass.HashString)) {
                         pass.Pass = temp;
+                        pass.Time = DateTime.Now;
                     }
 
                     if (String.IsNullOrEmpty(pass.Pass)) {
@@ -24,6 +25,7 @@ namespace PasswordCracker {
 
                         if (temp.Equals(pass.HashString)) {
                             pass.Pass = word;
+                            pass.Time = DateTime.Now;
                         }
                     }
 
@@ -33,6 +35,7 @@ namespace PasswordCracker {
 
                         if (temp.Equals(pass.HashString)) {
                             pass.Pass = ToTitleCase(word);
+                            pass.Time = DateTime.Now;
                         }
                     }
 
@@ -44,6 +47,31 @@ namespace PasswordCracker {
 
                         if (temp.Equals(pass.HashString)) {
                             pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (String.IsNullOrEmpty(pass.Pass)) {
+                        //Test with salt and alternated case.
+                        string modWord = AlternateCase(word);
+
+                        temp = hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (String.IsNullOrEmpty(pass.Pass)) {
+                        //Test with salt and alternated case.
+                        string modWord = AlternateCase(word, false);
+
+                        temp = hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
                         }
                     }
 
@@ -53,6 +81,27 @@ namespace PasswordCracker {
 
                         if (!String.IsNullOrEmpty(temp)) {
                             pass.Pass = temp;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (String.IsNullOrEmpty(pass.Pass)) {
+                        //Test with salt and appended characters.
+                        temp = checkAppended(word, pass.HashString, pass.Salt);
+
+                        if (!String.IsNullOrEmpty(temp)) {
+                            pass.Pass = temp;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (String.IsNullOrEmpty(pass.Pass)) {
+                        //Test with salt and prepended characters.
+                        temp = checkPrepended(word, pass.HashString, pass.Salt);
+
+                        if (!String.IsNullOrEmpty(temp)) {
+                            pass.Pass = temp;
+                            pass.Time = DateTime.Now;
                         }
                     }
                 }
@@ -60,6 +109,16 @@ namespace PasswordCracker {
                 passwords = checkAppended(word, passwords);
                 passwords = checkAppended(word.ToUpper(), passwords);
                 passwords = checkAppended(ToTitleCase(word), passwords);
+                passwords = checkAppended(AlternateCase(word), passwords);
+                passwords = checkAppended(AlternateCase(word, false), passwords);
+                passwords = checkAppended(word, passwords, initCommonAppends());
+
+                passwords = checkPrepended(word, passwords);
+                passwords = checkPrepended(word.ToUpper(), passwords);
+                passwords = checkPrepended(ToTitleCase(word), passwords);
+                passwords = checkPrepended(AlternateCase(word), passwords);
+                passwords = checkPrepended(AlternateCase(word, false), passwords);
+                passwords = checkPrepended(word, passwords, initCommonAppends());
             }
 
             return passwords;
@@ -139,6 +198,32 @@ namespace PasswordCracker {
             return result.ToString();
         }
 
+        private static List<Password> checkAppended(string word,
+                                                    List<Password> passwords,
+                                                    string[] appends) {
+            StringBuilder check = new StringBuilder(word);
+            string hashCheck;
+
+            foreach (var ap in appends) {
+                check.Append(ap);
+                hashCheck = hash(check.ToString());
+
+                foreach (var pass in passwords) {
+                    if (String.IsNullOrEmpty(pass.Salt)) {
+                        if (hashCheck.Equals(pass.HashString)) {
+                            pass.Pass = check.ToString();
+                            pass.Time = DateTime.Now;
+                            break;
+                        }
+                    }
+                }
+
+                check = new StringBuilder(word);
+            }
+
+            return passwords;
+        }
+
         private static string checkAppended(string input, string hashString,
                                             string salt) {
             StringBuilder result = new StringBuilder(input);
@@ -173,6 +258,75 @@ namespace PasswordCracker {
                     if (String.IsNullOrEmpty(pass.Salt)) {
                         if (hashCheck.Equals(pass.HashString)) {
                             pass.Pass = check.ToString();
+                            pass.Time = DateTime.Now;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return passwords;
+        }
+
+        private static List<Password> checkPrepended(string word,
+                                                    List<Password> passwords,
+                                                    string[] prepends) {
+            StringBuilder check = new StringBuilder(word);
+            string hashCheck;
+
+            foreach (var pr in prepends) {
+                check.Insert(0, pr);
+                hashCheck = hash(check.ToString());
+
+                foreach (var pass in passwords) {
+                    if (String.IsNullOrEmpty(pass.Salt)) {
+                        if (hashCheck.Equals(pass.HashString)) {
+                            pass.Pass = check.ToString();
+                            pass.Time = DateTime.Now;
+                            break;
+                        }
+                    }
+                }
+
+                check = new StringBuilder(word);
+            }
+
+            return passwords;
+        }
+
+        private static string checkPrepended(string input, string hashString,
+                                            string salt) {
+            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '#', '?' };
+            StringBuilder check = new StringBuilder(input);
+
+            if (!String.IsNullOrEmpty(salt)) {
+                foreach (char c in charSet) {
+                    check.Insert(0, c);
+
+                    if (hash($"{check.ToString()}{salt}").Equals(hashString)) {
+                        return $"{check.ToString()}";
+                    }
+                }
+            }
+
+            return String.Empty;
+        }
+
+        private static List<Password> checkPrepended(string word,
+                                                    List<Password> passwords) {
+            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '#', '?' };
+            StringBuilder check = new StringBuilder(word);
+            string hashCheck;
+
+            foreach (char c in charSet) {
+                check.Insert(0, c);
+                hashCheck = hash(check.ToString());
+
+                foreach (var pass in passwords) {
+                    if (String.IsNullOrEmpty(pass.Salt)) {
+                        if (hashCheck.Equals(pass.HashString)) {
+                            pass.Pass = check.ToString();
+                            pass.Time = DateTime.Now;
                             break;
                         }
                     }

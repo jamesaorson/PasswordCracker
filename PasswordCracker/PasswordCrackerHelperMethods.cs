@@ -79,6 +79,12 @@ namespace PasswordCracker
             return dict;
         }
 
+        private static string[] initCommonAppends() {
+            string[] result = { "123", "1234", "12345" };
+
+            return result;
+        }
+
         private static List<Password> parseHashesFile(string filename) {
             var reader = new StringReader(
                 File.ReadAllText(filename));
@@ -102,8 +108,47 @@ namespace PasswordCracker
         }
 
         private static string[] readAndSplitFile(string filename) {
-            return File.ReadAllText(filename).ToLower().Split((string[])null,
+            string[] result = File.ReadAllText(filename).ToLower().Split((string[])null,
                 StringSplitOptions.RemoveEmptyEntries);
+
+            result = result.Distinct().ToArray();
+
+            for (int i = 0; i < result.Length; ++i) {
+                result[i] = result[i].Replace(".", "").Replace("?", "")
+                                        .Replace("!", "").Replace("(", "")
+                                        .Replace(")", "").Replace("[", "")
+                                        .Replace("]", "").Replace(",", "")
+                                        .Replace(";", "").Replace(":", "");
+            }
+
+            return result.Distinct().ToArray();
+        }
+
+        private static string AlternateCase(string input, bool upperFirst = true) {
+            string result = "";
+
+            if (upperFirst) {
+                for (int i = 0; i < input.Length; ++i) {
+                    if (i % 2 == 0) {
+                        result += input[i].ToString().ToUpper();
+                    }
+                    else {
+                        result += input[i].ToString().ToLower();
+                    }
+                }
+            }
+            else {
+                for (int i = 0; i < input.Length; ++i) {
+                    if (i % 2 == 0) {
+                        result += input[i].ToString().ToLower();
+                    }
+                    else {
+                        result += input[i].ToString().ToUpper();
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }

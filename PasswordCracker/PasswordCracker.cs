@@ -32,10 +32,6 @@ namespace PasswordCracker {
             //Splits bible.txt into a string[] of individual lowercase tokens.
             dictWords = readAndSplitFile(bibleFile);
 
-            //Returns the array with duplicates removed (For program
-            //speed purposes).
-            dictWords = dictWords.Distinct().ToArray();
-
             //Hash and insert words from bible.txt
             dict = hash(dictWords, dict);
 
@@ -49,7 +45,17 @@ namespace PasswordCracker {
             passwords = guessPassword(passwords);
 
             foreach(var pass in passwords) {
-                result += $"{pass.Name}: {pass.Pass} {pass.Salt}\n";
+                if (!String.IsNullOrEmpty(pass.Pass)) {
+                    string temp = pass.Name;
+
+                    if (temp.Length < 6) {
+                        for (int i = temp.Length; i < 6; ++i) {
+                            temp += " ";
+                        }
+                    }
+
+                    result += $"{temp}:\t{pass.Pass}\t{pass.Time - start}\n";
+                }
             }
 
             File.WriteAllText(crackedPasswordsFile, result);
