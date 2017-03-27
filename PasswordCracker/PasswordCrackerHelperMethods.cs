@@ -38,22 +38,23 @@ namespace PasswordCracker
             return String.Empty;
         }
     
-        private static List<int> AllIndicesOf(string input, string sub) {
-            var indices = new List<int>();
+        private static int[] AllIndicesOf(string input, string sub) {
+            var indices = new int[input.Length];
             int index = -1;
+            int insertIndex = 0;
 
             for (int i = 0; i < input.Length; ++i) {
                 if (index < input.Length - 1) {
                     index = input.IndexOf(sub, index + 1);
 
                     if (index == -1) {
-                        return indices;
+                        return indices.Distinct().ToArray();
                     }
 
-                    indices.Add(index);
+                    indices[insertIndex++] = index;
                 }
                 else {
-                    return indices;
+                    return indices.Distinct().ToArray();
                 }
             }
 
@@ -79,7 +80,9 @@ namespace PasswordCracker
         }
 
         private static string[] initCommonAppends() {
-            string[] result = { "123", "1234", "12345" };
+            string[] result = { "12", "123", "1234", "12345", "123456",
+                                "1234567", "777", "1212", "123123",
+                                "7777777", "666", "666666", "123321" };
 
             return result;
         }

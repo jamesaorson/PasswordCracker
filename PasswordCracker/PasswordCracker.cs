@@ -21,13 +21,13 @@ namespace PasswordCracker {
         static void Main(string[] args) {
             start = DateTime.Now;
             
-            string bibleFile = "../../bible.txt"; //vs
-            string hashesFile = "../../pa4hashes.txt"; //vs
-            string crackedPasswordsFile = "../../crackedPasswords.txt"; //vs
+            //string bibleFile = "../../bible.txt"; //vs
+            //string hashesFile = "../../pa4hashes.txt"; //vs
+            //string crackedPasswordsFile = "../../crackedPasswords.txt"; //vs
             
-            //string bibleFile = "bible.txt";       //Linux
-            //string hashesFile = "pa4hashes.txt";    //Linux
-            //string crackedPasswordsFile = "crackedPasswords.txt";  //Linux
+            string bibleFile = "bible.txt";       //Linux
+            string hashesFile = "pa4hashes.txt";    //Linux
+            string crackedPasswordsFile = "crackedPasswords.txt";  //Linux
 
             letterReplaceDict = initReplaceDict();
 
@@ -41,8 +41,6 @@ namespace PasswordCracker {
 
             string result = "";
             var passwords = parseHashesFile(hashesFile);
-            var reader = new StringReader(
-                File.ReadAllText(hashesFile));
 
             passwords = guessPassword(passwords);
 
