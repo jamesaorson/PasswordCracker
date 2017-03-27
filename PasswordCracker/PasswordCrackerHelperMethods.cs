@@ -41,7 +41,6 @@ namespace PasswordCracker
         private static List<int> AllIndicesOf(string input, string sub) {
             var indices = new List<int>();
             int index = -1;
-            int lastIndex = input.LastIndexOf(sub);
 
             for (int i = 0; i < input.Length; ++i) {
                 if (index < input.Length - 1) {
