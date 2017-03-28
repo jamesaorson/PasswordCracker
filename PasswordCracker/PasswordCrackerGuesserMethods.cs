@@ -45,11 +45,13 @@ namespace PasswordCracker {
 
                     if (!found) {
                         //Test with salt and special characters.
-                        string modWord = ReplaceSubstring(word, "a", "@");
+                        string modWord = ReplaceSubstring(word, "a",
+                                             replaceDict["a"]);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
                         }
@@ -57,11 +59,13 @@ namespace PasswordCracker {
 
                     if (!found) {
                         //Test with salt and special characters.
-                        string modWord = ReplaceSubstring(word, "at", "@");
+                        string modWord = ReplaceSubstring(word, "at",
+                                             replaceDict["at"]);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
                         }
@@ -69,11 +73,13 @@ namespace PasswordCracker {
 
                     if (!found) {
                         //Test with salt and special characters.
-                        string modWord = ReplaceSubstring(word, "e", "3");
+                        string modWord = ReplaceSubstring(word, "e",
+                                             replaceDict["e"]);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
                         }
@@ -81,11 +87,13 @@ namespace PasswordCracker {
 
                     if (!found) {
                         //Test with salt and special characters.
-                        string modWord = ReplaceSubstring(word, "h", "#");
+                        string modWord = ReplaceSubstring(word, "h",
+                                             replaceDict["h"]);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
                         }
@@ -93,11 +101,13 @@ namespace PasswordCracker {
 
                     if (!found) {
                         //Test with salt and special characters.
-                        string modWord = ReplaceSubstring(word, "i", "1");
+                        string modWord = ReplaceSubstring(word, "i",
+                                             replaceDict["i"]);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
                         }
@@ -105,11 +115,13 @@ namespace PasswordCracker {
 
                     if (!found) {
                         //Test with salt and special characters.
-                        string modWord = ReplaceSubstring(word, "s", "$");
+                        string modWord = ReplaceSubstring(word, "o",
+                                             replaceDict["o"]);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
                         }
@@ -117,16 +129,255 @@ namespace PasswordCracker {
 
                     if (!found) {
                         //Test with salt and special characters.
-                        string modWord = ReplaceSubstring(word, "s", "5");
+                        string modWord = ReplaceSubstring(word, "s",
+                                             replaceDict["s"]);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
                         }
                     }
 
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word, "s",
+                                             replaceDict["S"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(ToTitleCase(word),
+                                             "a", replaceDict["a"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(ToTitleCase(word),
+                                             "at", replaceDict["at"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(ToTitleCase(word),
+                                             "e", replaceDict["e"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(ToTitleCase(word),
+                                             "h", replaceDict["h"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(ToTitleCase(word),
+                                             "i", replaceDict["i"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(ToTitleCase(word),
+                                             "o", replaceDict["o"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(ToTitleCase(word),
+                                             "s", replaceDict["s"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(ToTitleCase(word),
+                                             "s", replaceDict["S"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word.ToUpper(), "A",
+                                             replaceDict["a"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word.ToUpper(), "AT",
+                                             replaceDict["at"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word.ToUpper(), "E",
+                                             replaceDict["e"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word.ToUpper(), "H",
+                                             replaceDict["h"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word.ToUpper(), "I",
+                                             replaceDict["i"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word.ToUpper(), "O",
+                                             replaceDict["o"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word.ToUpper(), "S",
+                                             replaceDict["s"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word.ToUpper(), "S",
+                                             replaceDict["S"]);
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
 
                     if (!found) {
                         //Test with salt and alternated case.

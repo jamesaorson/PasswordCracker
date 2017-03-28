@@ -68,11 +68,14 @@ namespace PasswordCracker
             var dict = new Dictionary<string, string>();
 
             dict["a"] = "@";
+            dict["at"] = "@";
             dict["b"] = "8";
             dict["e"] = "3";
+            dict["h"] = "#";
             dict["i"] = "1";
             dict["o"] = "0";
             dict["s"] = "$";
+            dict["S"] = "5";
             dict["z"] = "2";
 
             return dict;
