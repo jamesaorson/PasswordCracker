@@ -83,7 +83,8 @@ namespace PasswordCracker
         private static string[] InitCommonAppends() {
             string[] result = { "12", "123", "1234", "12345", "123456",
                                 "1234567", "777", "1212", "123123",
-                                "7777777", "666", "666666", "123321" };
+                                "7777777", "666", "666666", "123321",
+                                "01", "001", "0001", "00", "000"};
 
             return result;
         }
@@ -244,8 +245,8 @@ namespace PasswordCracker
                                             string salt) {
             StringBuilder result = new StringBuilder(input);
             result.Append(" ");
-            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-            '!', '#', '?', '*' };
+            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
+                               '9', '!', '#', '?', '*' , '.', '%', '&' };
 
             if (!String.IsNullOrEmpty(salt)) {
                 foreach (char c in charSet) {
@@ -265,7 +266,8 @@ namespace PasswordCracker
             StringBuilder check = new StringBuilder(word);
             check.Append(" ");
             string hashCheck;
-            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '#', '?' };
+            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
+                               '9', '!', '#', '?', '*', '.', '%', '&' };
             
             foreach (char c in charSet) {
                 check[check.Length - 1] = c;
@@ -313,7 +315,8 @@ namespace PasswordCracker
 
         private static string CheckPrepended(string input, string hashString,
                                             string salt) {
-            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '#', '?' };
+            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
+                               '9', '!', '#', '?', '*', '.', '%', '&' };
             StringBuilder check = new StringBuilder(input);
 
             if (!String.IsNullOrEmpty(salt)) {
@@ -331,7 +334,8 @@ namespace PasswordCracker
 
         private static List<Password> CheckPrepended(string word,
                                                     List<Password> passwords) {
-            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '#', '?' };
+            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
+                               '9', '!', '#', '?', '*', '.', '%', '&' };
             StringBuilder check = new StringBuilder(word);
             string hashCheck;
 
