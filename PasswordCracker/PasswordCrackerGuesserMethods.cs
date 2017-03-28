@@ -8,9 +8,10 @@ namespace PasswordCracker {
             string temp = String.Empty;
 
             foreach (var word in dictWords) {
-                //Test normal dictionary search.
                 foreach (var pass in passwords) {
                     bool found = false;
+
+                    //Test normal dictionary search
                     temp = DictionarySearch(pass.HashString);
 
                     if (Hash(temp).Equals(pass.HashString)) {
@@ -19,8 +20,8 @@ namespace PasswordCracker {
                         pass.Time = DateTime.Now;
                     }
 
+                    //Test with salt
                     if (!found) {
-                        //Test with salt
                         temp = Hash($"{word}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
@@ -30,8 +31,8 @@ namespace PasswordCracker {
                         }
                     }
 
+                    //Test with salt and capitalized
                     if (!found) {
-                        //Test with salt and capitalizes
                         temp = Hash($"{ToTitleCase(word)}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
@@ -41,8 +42,8 @@ namespace PasswordCracker {
                         }
                     }
 
+                    //Test with salt and special characters
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word, "a",
                                              replaceDict["a"]);
 
@@ -56,7 +57,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word, "at",
                                              replaceDict["at"]);
 
@@ -70,7 +70,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word, "e",
                                              replaceDict["e"]);
 
@@ -84,7 +83,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word, "h",
                                              replaceDict["h"]);
 
@@ -98,7 +96,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word, "i",
                                              replaceDict["i"]);
 
@@ -112,7 +109,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word, "o",
                                              replaceDict["o"]);
 
@@ -126,7 +122,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word, "s",
                                              replaceDict["s"]);
 
@@ -140,7 +135,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word, "s",
                                              replaceDict["S"]);
 
@@ -154,7 +148,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(ToTitleCase(word),
                                              "a", replaceDict["a"]);
 
@@ -168,7 +161,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(ToTitleCase(word),
                                              "at", replaceDict["at"]);
 
@@ -182,7 +174,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(ToTitleCase(word),
                                              "e", replaceDict["e"]);
 
@@ -196,7 +187,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(ToTitleCase(word),
                                              "h", replaceDict["h"]);
 
@@ -210,7 +200,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(ToTitleCase(word),
                                              "i", replaceDict["i"]);
 
@@ -224,7 +213,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(ToTitleCase(word),
                                              "o", replaceDict["o"]);
 
@@ -238,7 +226,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(ToTitleCase(word),
                                              "s", replaceDict["s"]);
 
@@ -252,7 +239,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(ToTitleCase(word),
                                              "s", replaceDict["S"]);
 
@@ -266,7 +252,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word.ToUpper(), "A",
                                              replaceDict["a"]);
 
@@ -280,7 +265,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word.ToUpper(), "AT",
                                              replaceDict["at"]);
 
@@ -294,7 +278,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word.ToUpper(), "E",
                                              replaceDict["e"]);
 
@@ -308,7 +291,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word.ToUpper(), "H",
                                              replaceDict["h"]);
 
@@ -322,7 +304,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word.ToUpper(), "I",
                                              replaceDict["i"]);
 
@@ -336,7 +317,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word.ToUpper(), "O",
                                              replaceDict["o"]);
 
@@ -350,7 +330,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word.ToUpper(), "S",
                                              replaceDict["s"]);
 
@@ -364,7 +343,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word.ToUpper(), "S",
                                              replaceDict["S"]);
 
@@ -377,8 +355,8 @@ namespace PasswordCracker {
                         }
                     }
 
+                    //Test with salt and alternated case
                     if (!found) {
-                        //Test with salt and alternated case.
                         string modWord = AlternateCase(word);
 
                         temp = Hash($"{modWord}{pass.Salt}");
@@ -390,8 +368,8 @@ namespace PasswordCracker {
                         }
                     }
 
+                    //Test with salt and alternated case
                     if (!found) {
-                        //Test with salt and alternated case.
                         string modWord = AlternateCase(word, false);
 
                         temp = Hash($"{modWord}{pass.Salt}");
@@ -403,8 +381,8 @@ namespace PasswordCracker {
                         }
                     }
 
+                    //Test with salt and appended characters
                     if (!found) {
-                        //Test with salt and appended characters.
                         temp = CheckAppended(word, pass.HashString, pass.Salt);
 
                         if (!String.IsNullOrEmpty(temp)) {
@@ -414,19 +392,8 @@ namespace PasswordCracker {
                         }
                     }
 
+                    //Test with salt and prepended characters
                     if (!found) {
-                        //Test with salt and appended characters.
-                        temp = CheckAppended(word, pass.HashString, pass.Salt);
-
-                        if (!String.IsNullOrEmpty(temp)) {
-                            found = true;
-                            pass.Pass = temp;
-                            pass.Time = DateTime.Now;
-                        }
-                    }
-
-                    if (!found) {
-                        //Test with salt and prepended characters.
                         temp = CheckPrepended(word, pass.HashString, pass.Salt);
 
                         if (!String.IsNullOrEmpty(temp)) {
@@ -437,6 +404,7 @@ namespace PasswordCracker {
                     }
                 }
 
+                //Check all special append cases
                 passwords = CheckAppended(word, passwords);
                 passwords = CheckAppended(word.ToUpper(), passwords);
                 passwords = CheckAppended(ToTitleCase(word), passwords);
@@ -444,6 +412,7 @@ namespace PasswordCracker {
                 passwords = CheckAppended(AlternateCase(word, false), passwords);
                 passwords = CheckAppended(word, passwords, InitCommonAppends());
 
+                //Check all special prepend cases
                 passwords = CheckPrepended(word, passwords);
                 passwords = CheckPrepended(word.ToUpper(), passwords);
                 passwords = CheckPrepended(ToTitleCase(word), passwords);
@@ -452,6 +421,7 @@ namespace PasswordCracker {
                 passwords = CheckPrepended(word, passwords, InitCommonAppends());
             }
 
+            //Orders passwords by timestamp
             return passwords.OrderBy(pass => pass.Time).ToList();
         }
     }
