@@ -29,47 +29,21 @@ namespace PasswordCracker {
             string hashesFile = "pa4hashes.txt";    //Linux
             string crackedPasswordsFile = "crackedPasswords.txt";  //Linux
 
-            replaceDict = initReplaceDict();
+            replaceDict = InitReplaceDict();
 
-            //Splits bible.txt into a string[] of individual lowercase tokens.
-            dictWords = readAndSplitFile(bibleFile);
+            //Splits bible.txt into a string[] of individual lowercase tokens
+            dictWords = ReadAndSplitFile(bibleFile);
 
             //Hash and insert words from bible.txt
             dict = Hash(dictWords, dict);
 
             Console.WriteLine("done with " + dict.Count() + " words. ");
 
-            string result = "";
-            var passwords = parseHashesFile(hashesFile);
+            var passwords = ParseHashesFile(hashesFile);
 
-            passwords = guessPassword(passwords);
+            passwords = GuessPassword(passwords);
 
-            passwords = passwords.OrderBy(pass => pass.Time).ToList();
-
-            foreach(var pass in passwords) {
-                if (!String.IsNullOrEmpty(pass.Pass)) {
-                    string tempName = pass.Name;
-
-                    if (tempName.Length < 6) {
-                        for (int i = tempName.Length; i < 6; ++i) {
-                            tempName += " ";
-                        }
-                    }
-
-                    string tempPass = pass.Pass;
-
-                    if (tempPass.Length < 20) {
-                        for (int i = tempPass.Length; i < 20; ++i) {
-                            tempPass += " ";
-                        }
-                    }
-
-                    result += $"{tempName}:\t{tempPass}\t{pass.Time - start}\n";
-                }
-            }
-
-            File.WriteAllText(crackedPasswordsFile, result);
-            Console.WriteLine($"Wrote the file in {DateTime.Now - start}");
+            WriteOutputFile(passwords, crackedPasswordsFile);
         }
     }
 }
