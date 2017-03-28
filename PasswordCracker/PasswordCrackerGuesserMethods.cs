@@ -43,19 +43,6 @@ namespace PasswordCracker {
                         }
                     }
 
-                    /*if (!found) {
-                        //Test with salt and special characters.
-                        string modWord = SpecialCharacterReplace(word);
-
-                        temp = Hash($"{modWord}{pass.Salt}");
-
-                        if (temp.Equals(pass.HashString)) {
-                            found = true;
-                            pass.Pass = modWord;
-                            pass.Time = DateTime.Now;
-                        }
-                    }*/
-
                     if (!found) {
                         //Test with salt and special characters.
                         string modWord = ReplaceSubstring(word, "a", "@");
@@ -217,72 +204,6 @@ namespace PasswordCracker {
             }
 
             return passwords;
-        }
-         
-        private static string SpecialCharacterReplace(string input) {
-            StringBuilder result = new StringBuilder(input);
-            bool[] contains = new bool[7];
-            contains[0] = (input.Contains("a") || input.Contains("A"));
-            contains[1] = (input.Contains("b") || input.Contains("B"));
-            contains[2] = (input.Contains("e") || input.Contains("E"));
-            contains[3] = (input.Contains("i") || input.Contains("I"));
-            contains[4] = (input.Contains("o") || input.Contains("O"));
-            contains[5] = (input.Contains("s") || input.Contains("S"));
-            contains[6] = (input.Contains("z") || input.Contains("Z"));
-
-            var indices = new List<int[]>();
-
-            /*if (contains[0]) {
-                indices.Add(AllIndicesOf(input.ToLower(), "a"));
-
-                foreach (int index in indices[indices.Count - 1]) {
-                    result[index] = letterReplaceDict['a'];
-                }
-            }*/
-            /*if (contains[1]) {
-                indices.Add(AllIndicesOf(input.ToLower(), "b"));
-
-                foreach (int index in indices[indices.Count - 1]) {
-                    result[index] = letterReplaceDict['b'];
-                }
-            }*/
-            /*if (contains[2]) {
-                indices.Add(AllIndicesOf(input.ToLower(), "e"));
-                
-                foreach (int index in indices[indices.Count - 1]) {
-                    result[index] = letterReplaceDict['e'];
-                }
-            }*/
-            /*if (contains[3]) {
-                indices.Add(AllIndicesOf(input.ToLower(), "i"));
-                
-                foreach (int index in indices[indices.Count - 1]) {
-                    result[index] = letterReplaceDict['i'];
-                }
-            }*/
-            /*if (contains[4]) {
-                indices.Add(AllIndicesOf(input.ToLower(), "o"));
-                
-                foreach (int index in indices[indices.Count - 1]) {
-                    result[index] = letterReplaceDict['o'];
-                }
-            }*/
-            /*if (contains[5]) {
-                indices.Add(AllIndicesOf(input.ToLower(), "s"));
-
-                foreach (int index in indices[indices.Count - 1]) {
-                    result[index] = letterReplaceDict['s'];
-                }
-            }*/
-            /*if (contains[6]) {
-                indices.Add(AllIndicesOf(input.ToLower(), "z"));
-
-                foreach (int index in indices[indices.Count - 1]) {
-                    result[index] = letterReplaceDict['z'];
-                }
-            }*/
-
-            return result.ToString();
         }
 
         private static string ReplaceSubstring(string input, string sub,

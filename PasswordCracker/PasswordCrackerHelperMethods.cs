@@ -64,16 +64,16 @@ namespace PasswordCracker
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s.ToLower());
         }
 
-        private static Dictionary<char, char> initReplaceDict() {
-            var dict = new Dictionary<char, char>();
+        private static Dictionary<string, string> initReplaceDict() {
+            var dict = new Dictionary<string, string>();
 
-            dict['a'] = '@';
-            dict['b'] = '8';
-            dict['e'] = '3';
-            dict['i'] = '1';
-            dict['o'] = '0';
-            dict['s'] = '$';
-            dict['z'] = '2';
+            dict["a"] = "@";
+            dict["b"] = "8";
+            dict["e"] = "3";
+            dict["i"] = "1";
+            dict["o"] = "0";
+            dict["s"] = "$";
+            dict["z"] = "2";
 
             return dict;
         }

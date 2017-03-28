@@ -11,8 +11,8 @@ namespace PasswordCracker {
         //Holds dictionary of words in format of <hash, word>.
         private static Dictionary<string, string> dict
             = new Dictionary<string, string>();
-        private static Dictionary<char, char> letterReplaceDict
-            = new Dictionary<char, char>();
+        private static Dictionary<string, string> replaceDict
+            = new Dictionary<string, string>();
         private static string[] dictWords;
         //Performs MD5 hashing.
         private static MD5 md5 = MD5.Create();
@@ -29,7 +29,7 @@ namespace PasswordCracker {
             string hashesFile = "pa4hashes.txt";    //Linux
             string crackedPasswordsFile = "crackedPasswords.txt";  //Linux
 
-            letterReplaceDict = initReplaceDict();
+            replaceDict = initReplaceDict();
 
             //Splits bible.txt into a string[] of individual lowercase tokens.
             dictWords = readAndSplitFile(bibleFile);
@@ -44,17 +44,27 @@ namespace PasswordCracker {
 
             passwords = guessPassword(passwords);
 
+            passwords = passwords.OrderBy(pass => pass.Time).ToList();
+
             foreach(var pass in passwords) {
                 if (!String.IsNullOrEmpty(pass.Pass)) {
-                    string temp = pass.Name;
+                    string tempName = pass.Name;
 
-                    if (temp.Length < 6) {
-                        for (int i = temp.Length; i < 6; ++i) {
-                            temp += " ";
+                    if (tempName.Length < 6) {
+                        for (int i = tempName.Length; i < 6; ++i) {
+                            tempName += " ";
                         }
                     }
 
-                    result += $"{temp}:\t{pass.Pass}\t{pass.Time - start}\n";
+                    string tempPass = pass.Pass;
+
+                    if (tempPass.Length < 20) {
+                        for (int i = tempPass.Length; i < 20; ++i) {
+                            tempPass += " ";
+                        }
+                    }
+
+                    result += $"{tempName}:\t{tempPass}\t{pass.Time - start}\n";
                 }
             }
 
