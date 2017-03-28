@@ -3,35 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace PasswordCracker {
-    public partial class PasswordCracker
-    {
-        private static List<Password> GuessPassword(List<Password> passwords)
-        {
-            string temp = String.Empty;
+    public partial class PasswordCracker {
+        private static List<Password> GuessPassword(List<Password> passwords) {
+            string temp = string.Empty;
 
-            foreach (var word in dictWords)
-            {
-                foreach (var pass in passwords)
-                {
+            foreach (var word in dictWords) {
+                foreach (var pass in passwords) {
                     bool found = false;
 
                     //Test normal dictionary search
                     temp = DictionarySearch(pass.HashString);
 
-                    if (Hash(temp).Equals(pass.HashString))
-                    {
+                    if (Hash(temp).Equals(pass.HashString)) {
                         found = true;
                         pass.Pass = temp;
                         pass.Time = DateTime.Now;
                     }
 
                     //Test with salt
-                    if (!found)
-                    {
+                    if (!found) {
                         temp = Hash($"{word}{pass.Salt}");
 
-                        if (temp.Equals(pass.HashString))
-                        {
+                        if (temp.Equals(pass.HashString)) {
                             found = true;
                             pass.Pass = word;
                             pass.Time = DateTime.Now;
@@ -39,12 +32,10 @@ namespace PasswordCracker {
                     }
 
                     //Test with salt and capitalized
-                    if (!found)
-                    {
+                    if (!found) {
                         temp = Hash($"{ToTitleCase(word)}{pass.Salt}");
 
-                        if (temp.Equals(pass.HashString))
-                        {
+                        if (temp.Equals(pass.HashString)) {
                             found = true;
                             pass.Pass = ToTitleCase(word);
                             pass.Time = DateTime.Now;
@@ -85,14 +76,12 @@ namespace PasswordCracker {
                     }
 
                     //Test with salt and alternated case
-                    if (!found)
-                    {
+                    if (!found) {
                         string modWord = AlternateCase(word);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
-                        if (temp.Equals(pass.HashString))
-                        {
+                        if (temp.Equals(pass.HashString)) {
                             found = true;
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
@@ -100,14 +89,12 @@ namespace PasswordCracker {
                     }
 
                     //Test with salt and alternated case
-                    if (!found)
-                    {
+                    if (!found) {
                         string modWord = AlternateCase(word, false);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
-                        if (temp.Equals(pass.HashString))
-                        {
+                        if (temp.Equals(pass.HashString)) {
                             found = true;
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
@@ -115,12 +102,10 @@ namespace PasswordCracker {
                     }
 
                     //Test with salt and appended characters
-                    if (!found)
-                    {
+                    if (!found) {
                         temp = CheckAppended(word, pass.HashString, pass.Salt);
 
-                        if (!String.IsNullOrEmpty(temp))
-                        {
+                        if (!String.IsNullOrEmpty(temp)) {
                             found = true;
                             pass.Pass = temp;
                             pass.Time = DateTime.Now;
@@ -128,12 +113,10 @@ namespace PasswordCracker {
                     }
 
                     //Test with salt and prepended characters
-                    if (!found)
-                    {
+                    if (!found) {
                         temp = CheckPrepended(word, pass.HashString, pass.Salt);
 
-                        if (!String.IsNullOrEmpty(temp))
-                        {
+                        if (!String.IsNullOrEmpty(temp)) {
                             found = true;
                             pass.Pass = temp;
                             pass.Time = DateTime.Now;
@@ -162,7 +145,7 @@ namespace PasswordCracker {
             return passwords.OrderBy(pass => pass.Time).ToList();
         }
 
-        private static bool checkReplace(string word, Password pass, string sub, string replace) {
+        private static bool checkReplace( string word, Password pass, string sub, string replace) {
             string modWord = ReplaceSubstring(word, sub, replace);
 
             string temp = Hash($"{modWord}{pass.Salt}");

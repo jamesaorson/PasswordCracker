@@ -34,7 +34,7 @@ namespace PasswordCracker
                 return dict[hashString];
             }
 
-            return String.Empty;
+            return string.Empty;
         }
     
         private static int[] AllIndicesOf(string input, string sub) {
@@ -130,7 +130,7 @@ namespace PasswordCracker
 
         private static void WriteOutputFile(List<Password> passwords,
                                                string file) {
-            string result = String.Empty;
+            string result = string.Empty;
 
             foreach(var pass in passwords) {
                 if (!String.IsNullOrEmpty(pass.Pass)) {
@@ -203,7 +203,7 @@ namespace PasswordCracker
             if (subs.Length > replacements.Length) {
                 Console.WriteLine("Provide more string replacements");
 
-                return String.Empty;
+                return string.Empty;
             }
             
             for (int i = 0; i < subs.Length; ++i) {
@@ -258,7 +258,7 @@ namespace PasswordCracker
                 }
             }
 
-            return String.Empty;
+            return string.Empty;
         }
 
         private static List<Password> CheckAppended(string word,
@@ -329,7 +329,7 @@ namespace PasswordCracker
                 }
             }
 
-            return String.Empty;
+            return string.Empty;
         }
 
         private static List<Password> CheckPrepended(string word,
