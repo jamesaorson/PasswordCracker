@@ -12,48 +12,125 @@ namespace PasswordCracker {
             foreach (var word in dictWords) {
                 //Test normal dictionary search.
                 foreach (var pass in passwords) {
+                    bool found = false;
                     temp = dictionarySearch(pass.HashString);
 
                     if (Hash(temp).Equals(pass.HashString)) {
+                        found = true;
                         pass.Pass = temp;
                         pass.Time = DateTime.Now;
                     }
 
-                    if (String.IsNullOrEmpty(pass.Pass)) {
+                    if (!found) {
                         //Test with salt
                         temp = Hash($"{word}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
                             pass.Pass = word;
                             pass.Time = DateTime.Now;
                         }
                     }
 
-                    if (String.IsNullOrEmpty(pass.Pass)) {
+                    if (!found) {
                         //Test with salt and capitalizes
                         temp = Hash($"{ToTitleCase(word)}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
                             pass.Pass = ToTitleCase(word);
                             pass.Time = DateTime.Now;
                         }
                     }
 
-                    if (String.IsNullOrEmpty(pass.Pass)) {
+                    /*if (!found) {
                         //Test with salt and special characters.
                         string modWord = SpecialCharacterReplace(word);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }*/
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word, "a", "@");
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
                         }
                     }
 
-                    if (String.IsNullOrEmpty(pass.Pass)) {
+                    if (!found) {
                         //Test with salt and special characters.
-                        string modWord = ReplaceSwithFive(word);
+                        string modWord = ReplaceSubstring(word, "at", "@");
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word, "e", "3");
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word, "h", "#");
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word, "i", "1");
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word, "s", "$");
+
+                        temp = Hash($"{modWord}{pass.Salt}");
+
+                        if (temp.Equals(pass.HashString)) {
+                            pass.Pass = modWord;
+                            pass.Time = DateTime.Now;
+                        }
+                    }
+
+                    if (!found) {
+                        //Test with salt and special characters.
+                        string modWord = ReplaceSubstring(word, "s", "5");
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
@@ -64,55 +141,60 @@ namespace PasswordCracker {
                     }
 
 
-                    if (String.IsNullOrEmpty(pass.Pass)) {
+                    if (!found) {
                         //Test with salt and alternated case.
                         string modWord = AlternateCase(word);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
                         }
                     }
 
-                    if (String.IsNullOrEmpty(pass.Pass)) {
+                    if (!found) {
                         //Test with salt and alternated case.
                         string modWord = AlternateCase(word, false);
 
                         temp = Hash($"{modWord}{pass.Salt}");
 
                         if (temp.Equals(pass.HashString)) {
+                            found = true;
                             pass.Pass = modWord;
                             pass.Time = DateTime.Now;
                         }
                     }
 
-                    if (String.IsNullOrEmpty(pass.Pass)) {
+                    if (!found) {
                         //Test with salt and appended characters.
                         temp = CheckAppended(word, pass.HashString, pass.Salt);
 
                         if (!String.IsNullOrEmpty(temp)) {
+                            found = true;
                             pass.Pass = temp;
                             pass.Time = DateTime.Now;
                         }
                     }
 
-                    if (String.IsNullOrEmpty(pass.Pass)) {
+                    if (!found) {
                         //Test with salt and appended characters.
                         temp = CheckAppended(word, pass.HashString, pass.Salt);
 
                         if (!String.IsNullOrEmpty(temp)) {
+                            found = true;
                             pass.Pass = temp;
                             pass.Time = DateTime.Now;
                         }
                     }
 
-                    if (String.IsNullOrEmpty(pass.Pass)) {
+                    if (!found) {
                         //Test with salt and prepended characters.
                         temp = CheckPrepended(word, pass.HashString, pass.Salt);
 
                         if (!String.IsNullOrEmpty(temp)) {
+                            found = true;
                             pass.Pass = temp;
                             pass.Time = DateTime.Now;
                         }
@@ -185,13 +267,13 @@ namespace PasswordCracker {
                     result[index] = letterReplaceDict['o'];
                 }
             }*/
-            if (contains[5]) {
+            /*if (contains[5]) {
                 indices.Add(AllIndicesOf(input.ToLower(), "s"));
 
                 foreach (int index in indices[indices.Count - 1]) {
                     result[index] = letterReplaceDict['s'];
                 }
-            }
+            }*/
             /*if (contains[6]) {
                 indices.Add(AllIndicesOf(input.ToLower(), "z"));
 
@@ -203,15 +285,30 @@ namespace PasswordCracker {
             return result.ToString();
         }
 
-        private static string ReplaceSwithFive(string input) {
+        private static string ReplaceSubstring(string input, string sub,
+                                               string replacement) {
             StringBuilder result = new StringBuilder(input);
-            int[] indices = null;
 
-            if (input.Contains("s") || input.Contains("S")) {
-                indices = (AllIndicesOf(input.ToLower(), "s"));
+            if (input.Contains(sub)) {
+                result.Replace(sub, replacement);
+            }
 
-                foreach (int index in indices) {
-                    result[index] = '5';
+            return result.ToString();
+        }
+
+        private static string ReplaceSubstring(string input, string[] subs,
+                                               string[] replacements) {
+            StringBuilder result = new StringBuilder(input);
+
+            if (subs.Length > replacements.Length) {
+                Console.WriteLine("Provide more string replacements");
+
+                return String.Empty;
+            }
+            
+            for (int i = 0; i < subs.Length; ++i) {
+                if (result.ToString().Contains(subs[i])) {
+                    result.Replace(subs[i], replacements[i]);
                 }
             }
 
