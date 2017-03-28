@@ -28,7 +28,7 @@ namespace PasswordCracker {
             string crackedPasswordsFile = "crackedPasswords.txt";  //Linux
             */
 
-            replaceDict = InitReplaceDict();
+            InitReplaceDict();
 
             //Splits bible.txt into a string[] of individual lowercase tokens
             dictWords = ReadAndSplitFile(bibleFile);

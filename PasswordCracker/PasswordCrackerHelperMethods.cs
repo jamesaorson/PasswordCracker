@@ -63,21 +63,18 @@ namespace PasswordCracker
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s.ToLower());
         }
 
-        private static Dictionary<string, string> InitReplaceDict() {
-            var dict = new Dictionary<string, string>();
+        private static void InitReplaceDict() {
 
-            dict["a"] = "@";
-            dict["at"] = "@";
-            dict["b"] = "8";
-            dict["e"] = "3";
-            dict["h"] = "#";
-            dict["i"] = "1";
-            dict["o"] = "0";
-            dict["s"] = "$";
-            dict["S"] = "5";
-            dict["z"] = "2";
-
-            return dict;
+            replaceDict["a"] = "@";
+            replaceDict["at"] = "@";
+            replaceDict["b"] = "8";
+            replaceDict["e"] = "3";
+            replaceDict["h"] = "#";
+            replaceDict["i"] = "1";
+            replaceDict["o"] = "0";
+            replaceDict["s"] = "$";
+            replaceDict["S"] = "5";
+            replaceDict["z"] = "2";
         }
 
         private static string[] InitCommonAppends() {
