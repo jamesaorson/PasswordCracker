@@ -44,35 +44,43 @@ namespace PasswordCracker {
 
                     //Test with salt and special characters
                     if (!found) {
-                        found = checkReplace(word, pass, "a", replaceDict["a"]);
+                        found = CheckReplace(word, pass, "a", replaceDict["a"]);
                     }
 
                     if (!found) {
-                        found = checkReplace(word, pass, "at", replaceDict["at"]);
+                        found = CheckReplace(word, pass, "at", replaceDict["at"]);
                     }
 
                     if (!found) {
-                        found = checkReplace(word, pass, "e", replaceDict["e"]);
+                        found = CheckReplace(word, pass, "e", replaceDict["e"]);
                     }
 
                     if (!found) {
-                        found = checkReplace(word, pass, "h", replaceDict["h"]);
+                        found = CheckReplace(word, pass, "h", replaceDict["h"]);
                     }
 
                     if (!found) {
-                        found = checkReplace(word, pass, "i", replaceDict["i"]);
+                        found = CheckReplace(word, pass, "i", replaceDict["i"]);
                     }
 
                     if (!found) {
-                        found = checkReplace(word, pass, "o", replaceDict["o"]);
+                        found = CheckReplace(word, pass, "o", replaceDict["o"]);
                     }
 
                     if (!found) {
-                        found = checkReplace(word, pass, "s", replaceDict["s"]);
+                        found = CheckReplace(word, pass, "s", replaceDict["s"]);
                     }
 
                     if (!found) {
-                        found = checkReplace(word, pass, "s", replaceDict["S"]);
+                        found = CheckReplace(word, pass, "s", replaceDict["S"]);
+                    }
+
+                    if (!found)
+                    {
+                        string[] arr =    { "a", "e", "i", "o", "s" };
+                        string[] arrRep = { "@", "3", "1", "0", "$" };
+
+                        found = CheckReplace(word, pass, arr, arrRep);
                     }
 
                     //Test with salt and alternated case
@@ -143,43 +151,6 @@ namespace PasswordCracker {
 
             //Orders passwords by timestamp
             return passwords.OrderBy(pass => pass.Time).ToList();
-        }
-
-        private static bool checkReplace( string word, Password pass, string sub, string replace) {
-            string modWord = ReplaceSubstring(word, sub, replace);
-
-            string temp = Hash($"{modWord}{pass.Salt}");
-
-            if (temp.Equals(pass.HashString)) {
-                pass.Pass = modWord;
-                pass.Time = DateTime.Now;
-
-                return true;
-            }
-
-            modWord = ToTitleCase(modWord);
-
-            temp = Hash($"{modWord}{pass.Salt}");
-
-            if (temp.Equals(pass.HashString)) {
-                pass.Pass = modWord;
-                pass.Time = DateTime.Now;
-
-                return true;
-            }
-
-            modWord = modWord.ToUpper();
-
-            temp = Hash($"{modWord}{pass.Salt}");
-
-            if (temp.Equals(pass.HashString)) {
-                pass.Pass = modWord;
-                pass.Time = DateTime.Now;
-
-                return true;
-            }
-
-            return false;
         }
     }
 }

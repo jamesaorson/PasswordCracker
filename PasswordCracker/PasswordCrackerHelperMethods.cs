@@ -119,7 +119,8 @@ namespace PasswordCracker
                                         .Replace("!", "").Replace("(", "")
                                         .Replace(")", "").Replace("[", "")
                                         .Replace("]", "").Replace(",", "")
-                                        .Replace(";", "").Replace(":", "");
+                                        .Replace(";", "").Replace(":", "")
+                                        .Replace("'", "").Replace("\"", "");
             }
 
             return result.Distinct().ToArray();
@@ -210,6 +211,51 @@ namespace PasswordCracker
             }
 
             return result.ToString();
+        }
+
+        private static bool CheckReplace(string word, Password pass, string sub, string replace) {
+            string modWord = word;
+
+            if (!String.IsNullOrEmpty(sub)) {
+                modWord = ReplaceSubstring(modWord, sub, replace);
+            }
+
+            string temp = Hash($"{modWord}{pass.Salt}");
+
+            if (temp.Equals(pass.HashString)) {
+                pass.Pass = modWord;
+                pass.Time = DateTime.Now;
+
+                return true;
+            }
+
+            modWord = ToTitleCase(modWord);
+
+            temp = Hash($"{modWord}{pass.Salt}");
+
+            if (temp.Equals(pass.HashString)) {
+                pass.Pass = modWord;
+                pass.Time = DateTime.Now;
+
+                return true;
+            }
+
+            modWord = modWord.ToUpper();
+
+            temp = Hash($"{modWord}{pass.Salt}");
+
+            if (temp.Equals(pass.HashString)) {
+                pass.Pass = modWord;
+                pass.Time = DateTime.Now;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool CheckReplace(string word, Password pass, string[] subs, string[] reps) {
+            return CheckReplace(ReplaceSubstring(word, subs, reps), pass, string.Empty, string.Empty);
         }
 
         private static List<Password> CheckAppended(string word,
