@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 namespace PasswordCracker
 {
     partial class PasswordCracker {
-        private static Dictionary<string, string> hash(string[] input,
+        private static Dictionary<string, string> Hash(string[] input,
                 Dictionary<string, string> dict) {
             for (int i = 0; i < input.Length; ++i) {
                 //Inserts hashes into dictionary.
-                dict[hash(input[i])] = input[i];
+                dict[Hash(input[i])] = input[i];
             }
 
             //Converts bytes to a hex string and fixes formatting.
             return dict;
         }
 
-        private static string hash(string input) {
+        private static string Hash(string input) {
             byte[] inputBytes;
             byte[] hashBytes;
 
@@ -39,26 +39,25 @@ namespace PasswordCracker
         }
     
         private static int[] AllIndicesOf(string input, string sub) {
-            var indices = new int[input.Length];
+            var indices = new List<int>();
             int index = -1;
-            int insertIndex = 0;
 
             for (int i = 0; i < input.Length; ++i) {
                 if (index < input.Length - 1) {
                     index = input.IndexOf(sub, index + 1);
 
                     if (index == -1) {
-                        return indices.Distinct().ToArray();
+                        return indices.ToArray();
                     }
 
-                    indices[insertIndex++] = index;
+                    indices.Add(index);
                 }
                 else {
-                    return indices.Distinct().ToArray();
+                    return indices.ToArray();
                 }
             }
 
-            return indices;
+            return indices.ToArray();
         }
 
         private static string ToTitleCase(string s) {

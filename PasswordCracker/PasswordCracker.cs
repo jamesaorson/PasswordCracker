@@ -35,7 +35,7 @@ namespace PasswordCracker {
             dictWords = readAndSplitFile(bibleFile);
 
             //Hash and insert words from bible.txt
-            dict = hash(dictWords, dict);
+            dict = Hash(dictWords, dict);
 
             Console.WriteLine("done with " + dict.Count() + " words. ");
 
