@@ -258,10 +258,71 @@ namespace PasswordCracker
             return CheckReplace(ReplaceSubstring(word, subs, reps), pass, string.Empty, string.Empty);
         }
 
-        private static List<Password> CheckAppended(string word,
+        private static bool CheckAlternateCase(string input, Password pass, bool upperFirst = true) {
+            string temp = Hash($"{AlternateCase(input, upperFirst)}{pass.Salt}");
+
+            if (temp.Equals(pass.HashString)) {
+                pass.Pass = temp;
+                pass.Time = DateTime.Now;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool CheckAppended(string input, Password pass) {
+            StringBuilder check = new StringBuilder(input);
+            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
+                               '9', '!', '#', '?', '*' , '.', '%', '&' };
+
+            foreach (char c in charSet) {
+                check.Append(c);
+                
+                if (Hash($"{check.ToString()}{pass.Salt}").Equals(pass.HashString)) {
+                    pass.Pass = check.ToString();
+                    pass.Time = DateTime.Now;
+
+                    return true;
+                }
+
+                check = new StringBuilder(input);
+            }
+
+            return false;
+        }
+
+        private static List<Password> CheckAppended(string input,
+                                                    List<Password> passwords) {
+            StringBuilder check = new StringBuilder(input);
+            string hashCheck;
+            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
+                               '9', '!', '#', '?', '*', '.', '%', '&' };
+
+            foreach (char c in charSet) {
+                check.Append(c);
+                hashCheck = Hash(check.ToString());    
+
+                foreach (var pass in passwords) {
+                    if (String.IsNullOrEmpty(pass.Salt)) {
+                        if (hashCheck.Equals(pass.HashString)) {
+                            pass.Pass = check.ToString();
+                            pass.Time = DateTime.Now;
+                            break;
+                        }
+                    }
+                }
+
+                check = new StringBuilder(input);
+            }
+
+            return passwords;
+        }
+
+        private static List<Password> CheckAppended(string input,
                                                     List<Password> passwords,
                                                     string[] appends) {
-            StringBuilder check = new StringBuilder(word);
+            StringBuilder check = new StringBuilder(input);
             string hashCheck;
 
             foreach (var ap in appends) {
@@ -278,43 +339,43 @@ namespace PasswordCracker
                     }
                 }
 
-                check = new StringBuilder(word);
+                check = new StringBuilder(input);
             }
 
             return passwords;
         }
 
-        private static string CheckAppended(string input, string hashString,
-                                            string salt) {
-            StringBuilder result = new StringBuilder(input);
-            result.Append(" ");
-            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
-                               '9', '!', '#', '?', '*' , '.', '%', '&' };
-
-            if (!String.IsNullOrEmpty(salt)) {
-                foreach (char c in charSet) {
-                    result[result.Length - 1] = c;
-                
-                    if (Hash($"{result.ToString()}{salt}").Equals(hashString)) {
-                        return $"{result.ToString()}";
-                    }
-                }
-            }
-
-            return string.Empty;
-        }
-
-        private static List<Password> CheckAppended(string word,
-                                                    List<Password> passwords) {
-            StringBuilder check = new StringBuilder(word);
-            check.Append(" ");
-            string hashCheck;
+        private static bool CheckPrepended(string input, Password pass) {
             char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
                                '9', '!', '#', '?', '*', '.', '%', '&' };
+            StringBuilder check = new StringBuilder(input);
             
             foreach (char c in charSet) {
-                check[check.Length - 1] = c;
-                hashCheck = Hash(check.ToString());    
+                check.Insert(0, c);
+
+                if (Hash($"{check.ToString()}{pass.Salt}").Equals(pass.HashString)) {
+                    pass.Pass = check.ToString();
+                    pass.Time = DateTime.Now;
+
+                    return true;
+                }
+
+                check = new StringBuilder(input);
+            }
+
+            return false;
+        }
+
+        private static List<Password> CheckPrepended(string input,
+                                                    List<Password> passwords) {
+            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
+                               '9', '!', '#', '?', '*', '.', '%', '&' };
+            StringBuilder check = new StringBuilder(input);
+            string hashCheck;
+
+            foreach (char c in charSet) {
+                check.Insert(0, c);
+                hashCheck = Hash(check.ToString());
 
                 foreach (var pass in passwords) {
                     if (String.IsNullOrEmpty(pass.Salt)) {
@@ -325,15 +386,17 @@ namespace PasswordCracker
                         }
                     }
                 }
+
+                check = new StringBuilder(input);
             }
 
             return passwords;
         }
 
-        private static List<Password> CheckPrepended(string word,
+        private static List<Password> CheckPrepended(string input,
                                                     List<Password> passwords,
                                                     string[] prepends) {
-            StringBuilder check = new StringBuilder(word);
+            StringBuilder check = new StringBuilder(input);
             string hashCheck;
 
             foreach (var pr in prepends) {
@@ -350,51 +413,7 @@ namespace PasswordCracker
                     }
                 }
 
-                check = new StringBuilder(word);
-            }
-
-            return passwords;
-        }
-
-        private static string CheckPrepended(string input, string hashString,
-                                            string salt) {
-            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
-                               '9', '!', '#', '?', '*', '.', '%', '&' };
-            StringBuilder check = new StringBuilder(input);
-
-            if (!String.IsNullOrEmpty(salt)) {
-                foreach (char c in charSet) {
-                    check.Insert(0, c);
-
-                    if (Hash($"{check.ToString()}{salt}").Equals(hashString)) {
-                        return $"{check.ToString()}";
-                    }
-                }
-            }
-
-            return string.Empty;
-        }
-
-        private static List<Password> CheckPrepended(string word,
-                                                    List<Password> passwords) {
-            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
-                               '9', '!', '#', '?', '*', '.', '%', '&' };
-            StringBuilder check = new StringBuilder(word);
-            string hashCheck;
-
-            foreach (char c in charSet) {
-                check.Insert(0, c);
-                hashCheck = Hash(check.ToString());
-
-                foreach (var pass in passwords) {
-                    if (String.IsNullOrEmpty(pass.Salt)) {
-                        if (hashCheck.Equals(pass.HashString)) {
-                            pass.Pass = check.ToString();
-                            pass.Time = DateTime.Now;
-                            break;
-                        }
-                    }
-                }
+                check = new StringBuilder(input);
             }
 
             return passwords;

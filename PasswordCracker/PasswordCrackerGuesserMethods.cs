@@ -75,60 +75,38 @@ namespace PasswordCracker {
                         found = CheckReplace(word, pass, "s", replaceDict["S"]);
                     }
 
-                    if (!found)
-                    {
+                    if (!found) {
                         string[] arr =    { "a", "e", "i", "o", "s" };
                         string[] arrRep = { "@", "3", "1", "0", "$" };
 
                         found = CheckReplace(word, pass, arr, arrRep);
                     }
 
-                    //Test with salt and alternated case
                     if (!found) {
-                        string modWord = AlternateCase(word);
+                        string[] arr =    { "a", "e", "i", "o", "s" };
+                        string[] arrRep = { "@", "3", "1", "0", "5" };
 
-                        temp = Hash($"{modWord}{pass.Salt}");
-
-                        if (temp.Equals(pass.HashString)) {
-                            found = true;
-                            pass.Pass = modWord;
-                            pass.Time = DateTime.Now;
-                        }
+                        found = CheckReplace(word, pass, arr, arrRep);
                     }
 
                     //Test with salt and alternated case
                     if (!found) {
-                        string modWord = AlternateCase(word, false);
+                        found = CheckAlternateCase(word, pass);
+                    }
 
-                        temp = Hash($"{modWord}{pass.Salt}");
-
-                        if (temp.Equals(pass.HashString)) {
-                            found = true;
-                            pass.Pass = modWord;
-                            pass.Time = DateTime.Now;
-                        }
+                    //Test with salt and alternated case
+                    if (!found) {
+                        found = CheckAlternateCase(word, pass, false);
                     }
 
                     //Test with salt and appended characters
                     if (!found) {
-                        temp = CheckAppended(word, pass.HashString, pass.Salt);
-
-                        if (!String.IsNullOrEmpty(temp)) {
-                            found = true;
-                            pass.Pass = temp;
-                            pass.Time = DateTime.Now;
-                        }
+                        found = CheckAppended(word, pass);
                     }
 
                     //Test with salt and prepended characters
                     if (!found) {
-                        temp = CheckPrepended(word, pass.HashString, pass.Salt);
-
-                        if (!String.IsNullOrEmpty(temp)) {
-                            found = true;
-                            pass.Pass = temp;
-                            pass.Time = DateTime.Now;
-                        }
+                        found = CheckPrepended(word, pass);
                     }
                 }
 
