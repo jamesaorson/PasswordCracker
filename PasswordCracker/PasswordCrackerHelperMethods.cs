@@ -81,7 +81,7 @@ namespace PasswordCracker
             string[] result = { "12", "123", "1234", "12345", "123456",
                                 "1234567", "777", "1212", "123123",
                                 "7777777", "666", "666666", "123321",
-                                "01", "001", "0001", "00", "000"};
+                                "01", "001", "0001", "00", "11" };
 
             return result;
         }
@@ -324,7 +324,7 @@ namespace PasswordCracker
                                                     string[] appends) {
             StringBuilder check = new StringBuilder(input);
             string hashCheck;
-
+            
             foreach (var ap in appends) {
                 check.Append(ap);
                 hashCheck = Hash(check.ToString());

@@ -117,6 +117,7 @@ namespace PasswordCracker {
                 passwords = CheckAppended(AlternateCase(word), passwords);
                 passwords = CheckAppended(AlternateCase(word, false), passwords);
                 passwords = CheckAppended(word, passwords, InitCommonAppends());
+                passwords = CheckAppended(ToTitleCase(word), passwords, InitCommonAppends());
 
                 //Check all special prepend cases
                 passwords = CheckPrepended(word, passwords);
@@ -125,6 +126,7 @@ namespace PasswordCracker {
                 passwords = CheckPrepended(AlternateCase(word), passwords);
                 passwords = CheckPrepended(AlternateCase(word, false), passwords);
                 passwords = CheckPrepended(word, passwords, InitCommonAppends());
+                passwords = CheckPrepended(ToTitleCase(word), passwords, InitCommonAppends());
             }
 
             //Orders passwords by timestamp
