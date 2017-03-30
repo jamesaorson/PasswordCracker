@@ -7,9 +7,11 @@ namespace PasswordCracker {
         private static List<Password> GuessPassword(List<Password> passwords) {
             string temp = string.Empty;
 
+            bool found = false;
+
             foreach (var word in dictWords) {
                 foreach (var pass in passwords) {
-                    bool found = false;
+                    found = false;
 
                     //Test normal dictionary search
                     temp = DictionarySearch(pass.HashString);
@@ -109,24 +111,15 @@ namespace PasswordCracker {
                         found = CheckPrepended(word, pass);
                     }
                 }
-
                 //Check all special append cases
-                passwords = CheckAppended(word, passwords);
-                passwords = CheckAppended(word.ToUpper(), passwords);
-                passwords = CheckAppended(ToTitleCase(word), passwords);
-                passwords = CheckAppended(AlternateCase(word), passwords);
-                passwords = CheckAppended(AlternateCase(word, false), passwords);
-                passwords = CheckAppended(word, passwords, InitCommonAppends());
-                passwords = CheckAppended(ToTitleCase(word), passwords, InitCommonAppends());
+                if (!found) {
+                    found = CheckAppended(word, passwords);
+                }
 
                 //Check all special prepend cases
-                passwords = CheckPrepended(word, passwords);
-                passwords = CheckPrepended(word.ToUpper(), passwords);
-                passwords = CheckPrepended(ToTitleCase(word), passwords);
-                passwords = CheckPrepended(AlternateCase(word), passwords);
-                passwords = CheckPrepended(AlternateCase(word, false), passwords);
-                passwords = CheckPrepended(word, passwords, InitCommonAppends());
-                passwords = CheckPrepended(ToTitleCase(word), passwords, InitCommonAppends());
+                if (!found) {
+                    found = CheckPrepended(word, passwords);
+                }
             }
 
             //Orders passwords by timestamp

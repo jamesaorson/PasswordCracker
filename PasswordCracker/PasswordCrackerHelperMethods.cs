@@ -67,6 +67,7 @@ namespace PasswordCracker
 
             replaceDict["a"] = "@";
             replaceDict["at"] = "@";
+            replaceDict["and"] = "&";
             replaceDict["b"] = "8";
             replaceDict["e"] = "3";
             replaceDict["h"] = "#";
@@ -78,10 +79,12 @@ namespace PasswordCracker
         }
 
         private static string[] InitCommonAppends() {
-            string[] result = { "12", "123", "1234", "12345", "123456",
+            string[] result = { "0", "1", "2", "3", "4", "5", "6", "7", "8",
+                                "9", "12", "123", "1234", "12345", "123456",
                                 "1234567", "777", "1212", "123123",
                                 "7777777", "666", "666666", "123321",
-                                "01", "001", "0001", "00", "11" };
+                                "01", "001", "0001", "00", "11", "!",
+                                "?", "_1", "_01", "-1", "-01", "#", "&"};
 
             return result;
         }
@@ -109,18 +112,18 @@ namespace PasswordCracker
         }
 
         private static string[] ReadAndSplitFile(string filename) {
-            string[] result = File.ReadAllText(filename).ToLower().Split((string[])null,
-                StringSplitOptions.RemoveEmptyEntries);
-
+            string[] result = File.ReadAllText(filename).ToLower()
+                              .Split((string[])null,
+                               StringSplitOptions.RemoveEmptyEntries);
             result = result.Distinct().ToArray();
 
             for (int i = 0; i < result.Length; ++i) {
                 result[i] = result[i].Replace(".", "").Replace("?", "")
-                                        .Replace("!", "").Replace("(", "")
-                                        .Replace(")", "").Replace("[", "")
-                                        .Replace("]", "").Replace(",", "")
-                                        .Replace(";", "").Replace(":", "")
-                                        .Replace("'", "").Replace("\"", "");
+                                     .Replace("!", "").Replace("(", "")
+                                     .Replace(")", "").Replace("[", "")
+                                     .Replace("]", "").Replace(",", "")
+                                     .Replace(";", "").Replace(":", "")
+                                     .Replace("'", "").Replace("\"", "");
             }
 
             return result.Distinct().ToArray();
@@ -156,7 +159,8 @@ namespace PasswordCracker
             Console.WriteLine($"Wrote the file in {DateTime.Now - start}");
         }
 
-        private static string AlternateCase(string input, bool upperFirst = true) {
+        private static string AlternateCase(string input,
+                                            bool upperFirst = true) {
             string result = "";
 
             if (upperFirst) {
@@ -185,7 +189,7 @@ namespace PasswordCracker
 
         private static string ReplaceSubstring(string input, string sub,
                                                string replacement) {
-            StringBuilder result = new StringBuilder(input);
+            var result = new StringBuilder(input);
 
             if (input.Contains(sub)) {
                 result.Replace(sub, replacement);
@@ -196,7 +200,7 @@ namespace PasswordCracker
 
         private static string ReplaceSubstring(string input, string[] subs,
                                                string[] replacements) {
-            StringBuilder result = new StringBuilder(input);
+            var result = new StringBuilder(input);
 
             if (subs.Length > replacements.Length) {
                 Console.WriteLine("Provide more string replacements");
@@ -254,11 +258,14 @@ namespace PasswordCracker
             return false;
         }
 
-        private static bool CheckReplace(string word, Password pass, string[] subs, string[] reps) {
-            return CheckReplace(ReplaceSubstring(word, subs, reps), pass, string.Empty, string.Empty);
+        private static bool CheckReplace(string word, Password pass,
+                                         string[] subs, string[] reps) {
+            return CheckReplace(ReplaceSubstring(word, subs, reps), pass,
+                                                 string.Empty, string.Empty);
         }
 
-        private static bool CheckAlternateCase(string input, Password pass, bool upperFirst = true) {
+        private static bool CheckAlternateCase(string input, Password pass,
+                                               bool upperFirst = true) {
             string temp = Hash($"{AlternateCase(input, upperFirst)}{pass.Salt}");
 
             if (temp.Equals(pass.HashString)) {
@@ -271,126 +278,268 @@ namespace PasswordCracker
             return false;
         }
 
-        private static bool CheckAppended(string input, Password pass) {
-            StringBuilder check = new StringBuilder(input);
-            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
-                               '9', '!', '#', '?', '*' , '.', '%', '&' };
+        private static bool CheckAppended(string word, Password pass) {
+            var check = new StringBuilder(word);
+            var titleCheck = new StringBuilder(ToTitleCase(word));
+            var upperCheck = new StringBuilder(word.ToUpper());
+            var alt1Check = new StringBuilder(AlternateCase(word));
+            var alt2Check = new StringBuilder(AlternateCase(word, false));
+            string[] stringSet = InitCommonAppends();    
 
-            foreach (char c in charSet) {
-                check.Append(c);
+            foreach (string s in stringSet) {
+                check.Append(s);
+                titleCheck.Append(s);
+                upperCheck.Append(s);
+                alt1Check.Append(s);
+                alt2Check.Append(s);
                 
-                if (Hash($"{check.ToString()}{pass.Salt}").Equals(pass.HashString)) {
+                if (Hash($"{check.ToString()}{pass.Salt}")
+                        .Equals(pass.HashString)) {
                     pass.Pass = check.ToString();
                     pass.Time = DateTime.Now;
 
                     return true;
                 }
+                if (Hash($"{titleCheck.ToString()}{pass.Salt}")
+                        .Equals(pass.HashString)) {
+                    pass.Pass = titleCheck.ToString();
+                    pass.Time = DateTime.Now;
 
-                check = new StringBuilder(input);
-            }
-
-            return false;
-        }
-
-        private static List<Password> CheckAppended(string input,
-                                                    List<Password> passwords) {
-            StringBuilder check = new StringBuilder(input);
-            string hashCheck;
-            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
-                               '9', '!', '#', '?', '*', '.', '%', '&' };
-
-            foreach (char c in charSet) {
-                check.Append(c);
-                hashCheck = Hash(check.ToString());    
-
-                foreach (var pass in passwords) {
-                    if (String.IsNullOrEmpty(pass.Salt)) {
-                        if (hashCheck.Equals(pass.HashString)) {
-                            pass.Pass = check.ToString();
-                            pass.Time = DateTime.Now;
-                            break;
-                        }
-                    }
+                    return true;
                 }
+                if (Hash($"{upperCheck.ToString()}{pass.Salt}")
+                        .Equals(pass.HashString)) {
+                    pass.Pass = upperCheck.ToString();
+                    pass.Time = DateTime.Now;
 
-                check = new StringBuilder(input);
-            }
-
-            return passwords;
-        }
-
-        private static List<Password> CheckAppended(string input,
-                                                    List<Password> passwords,
-                                                    string[] appends) {
-            StringBuilder check = new StringBuilder(input);
-            string hashCheck;
-            
-            foreach (var ap in appends) {
-                check.Append(ap);
-                hashCheck = Hash(check.ToString());
-
-                foreach (var pass in passwords) {
-                    if (String.IsNullOrEmpty(pass.Salt)) {
-                        if (hashCheck.Equals(pass.HashString)) {
-                            pass.Pass = check.ToString();
-                            pass.Time = DateTime.Now;
-                            break;
-                        }
-                    }
+                    return true;
                 }
+                if (Hash($"alt1Check.ToString()}{pass.Salt}")
+                        .Equals(pass.HashString)) {
+                    pass.Pass = alt1Check.ToString();
+                    pass.Time = DateTime.Now;
 
-                check = new StringBuilder(input);
-            }
-
-            return passwords;
-        }
-
-        private static bool CheckPrepended(string input, Password pass) {
-            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
-                               '9', '!', '#', '?', '*', '.', '%', '&' };
-            StringBuilder check = new StringBuilder(input);
-            
-            foreach (char c in charSet) {
-                check.Insert(0, c);
-
-                if (Hash($"{check.ToString()}{pass.Salt}").Equals(pass.HashString)) {
-                    pass.Pass = check.ToString();
+                    return true;
+                }
+                if (Hash($"{alt2Check.ToString()}{pass.Salt}")
+                        .Equals(pass.HashString)) {
+                    pass.Pass = alt2Check.ToString();
                     pass.Time = DateTime.Now;
 
                     return true;
                 }
 
-                check = new StringBuilder(input);
+                check = new StringBuilder(word);
+                titleCheck = new StringBuilder(ToTitleCase(word));
+                upperCheck = new StringBuilder(word.ToUpper());
+                alt1Check = new StringBuilder(AlternateCase(word));
+                alt2Check = new StringBuilder(AlternateCase(word, false));
             }
 
             return false;
         }
 
-        private static List<Password> CheckPrepended(string input,
+        private static bool CheckAppended(string word,
                                                     List<Password> passwords) {
-            char[] charSet = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
-                               '9', '!', '#', '?', '*', '.', '%', '&' };
-            StringBuilder check = new StringBuilder(input);
+            var check = new StringBuilder(word);
+            var titleCheck = new StringBuilder(ToTitleCase(word));
+            var upperCheck = new StringBuilder(word.ToUpper());
+            var alt1Check = new StringBuilder(AlternateCase(word));
+            var alt2Check = new StringBuilder(AlternateCase(word, false));
             string hashCheck;
+            string titleHashCheck;
+            string upperHashCheck;
+            string alt1HashCheck;
+            string alt2HashCheck;
+            string[] stringSet = InitCommonAppends();
 
-            foreach (char c in charSet) {
-                check.Insert(0, c);
+            foreach (string s in stringSet) {
+                check.Append(s);
+                titleCheck.Append(s);
+                upperCheck.Append(s);
+                alt1Check.Append(s);
+                alt2Check.Append(s);
+
                 hashCheck = Hash(check.ToString());
-
+                titleHashCheck = Hash(titleCheck.ToString());
+                upperHashCheck = Hash(upperCheck.ToString());
+                alt1HashCheck = Hash(alt1Check.ToString());
+                alt2HashCheck = Hash(alt2Check.ToString());
+                
                 foreach (var pass in passwords) {
                     if (String.IsNullOrEmpty(pass.Salt)) {
                         if (hashCheck.Equals(pass.HashString)) {
                             pass.Pass = check.ToString();
                             pass.Time = DateTime.Now;
-                            break;
+                            
+                            return true;
+                        }
+                        if (titleHashCheck.Equals(pass.HashString)) {
+                            pass.Pass = titleCheck.ToString();
+                            pass.Time = DateTime.Now;
+
+                            return true;
+                        }
+                        if (upperHashCheck.Equals(pass.HashString)) {
+                            pass.Pass = upperCheck.ToString();
+                            pass.Time = DateTime.Now;
+
+                            return true;
+                        }
+                        if (alt1HashCheck.Equals(pass.HashString)) {
+                            pass.Pass = alt1Check.ToString();
+                            pass.Time = DateTime.Now;
+                            
+                            return true;
+                        }
+                        if (alt2HashCheck.Equals(pass.HashString)) {
+                            pass.Pass = alt2Check.ToString();
+                            pass.Time = DateTime.Now;
+
+                            return true;
                         }
                     }
                 }
 
-                check = new StringBuilder(input);
+                check = new StringBuilder(word);
+                titleCheck = new StringBuilder(ToTitleCase(word));
+                upperCheck = new StringBuilder(word.ToUpper());
+                alt1Check = new StringBuilder(AlternateCase(word));
+                alt2Check = new StringBuilder(AlternateCase(word, false));
             }
 
-            return passwords;
+            return false;
+        }
+
+        private static bool CheckPrepended(string word, Password pass) {
+            var check = new StringBuilder(word);
+            var titleCheck = new StringBuilder(ToTitleCase(word));
+            var upperCheck = new StringBuilder(word.ToUpper());
+            var alt1Check = new StringBuilder(AlternateCase(word));
+            var alt2Check = new StringBuilder(AlternateCase(word, false));
+            string[] stringSet = InitCommonAppends();
+
+            foreach (string s in stringSet) {
+                check.Insert(0, s);
+                titleCheck.Insert(0, s);
+                upperCheck.Insert(0, s);
+                alt1Check.Insert(0, s);
+                alt2Check.Insert(0, s);
+
+                if (Hash($"{check.ToString()}{pass.Salt}")
+                        .Equals(pass.HashString)) {
+                    pass.Pass = check.ToString();
+                    pass.Time = DateTime.Now;
+
+                    return true;
+                }
+                if (Hash($"{titleCheck.ToString()}{pass.Salt}")
+                        .Equals(pass.HashString)) {
+                    pass.Pass = titleCheck.ToString();
+                    pass.Time = DateTime.Now;
+
+                    return true;
+                }
+                if (Hash($"{upperCheck.ToString()}{pass.Salt}")
+                        .Equals(pass.HashString)) {
+                    pass.Pass = upperCheck.ToString();
+                    pass.Time = DateTime.Now;
+
+                    return true;
+                }
+                if (Hash($"{alt1Check.ToString()}{pass.Salt}")
+                        .Equals(pass.HashString)) {
+                    pass.Pass = alt1Check.ToString();
+                    pass.Time = DateTime.Now;
+
+                    return true;
+                }
+                if (Hash($"{alt2Check.ToString()}{pass.Salt}")
+                        .Equals(pass.HashString)) {
+                    pass.Pass = alt2Check.ToString();
+                    pass.Time = DateTime.Now;
+
+                    return true;
+                }
+
+                check = new StringBuilder(word);
+                titleCheck = new StringBuilder(ToTitleCase(word));
+                upperCheck = new StringBuilder(word.ToUpper());
+                alt1Check = new StringBuilder(AlternateCase(word));
+                alt2Check = new StringBuilder(AlternateCase(word, false));
+            }
+
+            return false;
+        }
+
+        private static bool CheckPrepended(string word,
+                                                    List<Password> passwords) {
+            var check = new StringBuilder(word);
+            var titleCheck = new StringBuilder(ToTitleCase(word));
+            var upperCheck = new StringBuilder(word.ToUpper());
+            var alt1Check = new StringBuilder(AlternateCase(word));
+            var alt2Check = new StringBuilder(AlternateCase(word, false));
+            string hashCheck;
+            string titleHashCheck;
+            string upperHashCheck;
+            string alt1HashCheck;
+            string alt2HashCheck;
+            string[] stringSet = InitCommonAppends();
+
+            foreach (string s in stringSet) {
+                check.Insert(0, s);
+                titleCheck.Insert(0, s);
+                upperCheck.Insert(0, s);
+                alt1Check.Insert(0, s);
+                alt2Check.Insert(0, s);
+
+                hashCheck = Hash(check.ToString());
+                titleHashCheck = Hash(titleCheck.ToString());
+                upperHashCheck = Hash(upperCheck.ToString());
+                alt1HashCheck = Hash(alt1Check.ToString());
+                alt2HashCheck = Hash(alt2Check.ToString());
+
+                foreach (var pass in passwords) {
+                    if (hashCheck.Equals(pass.HashString)) {
+                        pass.Pass = check.ToString();
+                        pass.Time = DateTime.Now;
+                            
+                        return true;
+                    }
+                    if (titleHashCheck.Equals(pass.HashString)) {
+                        pass.Pass = titleCheck.ToString();
+                        pass.Time = DateTime.Now;
+                            
+                        return true;
+                    }
+                    if (upperHashCheck.Equals(pass.HashString)) {
+                        pass.Pass = upperCheck.ToString();
+                        pass.Time = DateTime.Now;
+                            
+                        return true;
+                    }
+                    if (alt1HashCheck.Equals(pass.HashString)) {
+                        pass.Pass = alt1HashCheck.ToString();
+                        pass.Time = DateTime.Now;
+                            
+                        return true;
+                    }
+                    if (alt2HashCheck.Equals(pass.HashString)) {
+                        pass.Pass = alt2HashCheck.ToString();
+                        pass.Time = DateTime.Now;
+                            
+                        return true;
+                    }
+                }
+
+                check = new StringBuilder(word);
+                titleCheck = new StringBuilder(ToTitleCase(word));
+                upperCheck = new StringBuilder(word.ToUpper());
+                alt1Check = new StringBuilder(AlternateCase(word));
+                alt2Check = new StringBuilder(AlternateCase(word, false));
+            }
+
+            return false;
         }
 
         private static List<Password> CheckPrepended(string input,
