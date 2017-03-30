@@ -314,7 +314,7 @@ namespace PasswordCracker
 
                     return true;
                 }
-                if (Hash($"alt1Check.ToString()}{pass.Salt}")
+                if (Hash($"{alt1Check.ToString()}{pass.Salt}")
                         .Equals(pass.HashString)) {
                     pass.Pass = alt1Check.ToString();
                     pass.Time = DateTime.Now;
