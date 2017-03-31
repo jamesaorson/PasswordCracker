@@ -170,14 +170,14 @@ namespace PasswordCracker {
                     }
 
                     //Test with salt and alternated case
-                    if (!found) {
+                    /*if (!found) {
                         found = CheckAlternateCase(word, pass);
                     }
 
                     //Test with salt and alternated case
                     if (!found) {
                         found = CheckAlternateCase(word, pass, false);
-                    }
+                    }*/
 
                     //Test with salt and appended characters
                     if (!found) {
@@ -190,13 +190,13 @@ namespace PasswordCracker {
                 }
 
                 //Check all special prepend cases
-                if (!found) {
+                /*if (!found) {
                     found = CheckPrepended(word, passwords);
                 }
 
                 if (!found) {
                     found = CheckAppendAndPrepend(word, passwords);
-                }
+                }*/
             }
 
             //Orders passwords by timestamp

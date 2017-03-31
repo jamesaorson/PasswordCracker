@@ -60,7 +60,11 @@ namespace PasswordCracker
         }
 
         private static string ToTitleCase(string s) {
-            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s.ToLower());
+            StringBuilder result = new StringBuilder(s);
+
+            result[0] = result[0].ToString().ToUpper()[0];
+
+            return result.ToString();
         }
 
         private static void InitReplaceDict() {
