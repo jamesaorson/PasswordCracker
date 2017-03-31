@@ -50,14 +50,6 @@ namespace PasswordCracker {
                     }
 
                     if (!found) {
-                        found = CheckReplace(word, pass, "at", replaceDict["at"]);
-                    }
-
-                    if (!found) {
-                        found = CheckReplace(word, pass, "and", replaceDict["and"]);
-                    }
-
-                    if (!found) {
                         found = CheckReplace(word, pass, "e", replaceDict["e"]);
                     }
 
@@ -99,86 +91,6 @@ namespace PasswordCracker {
                         found = CheckReplace(word, pass, arr, arrRep);
                     }
 
-                    if (!found) {
-                        string[] arr =    { "a", "e", "i", "o", "s" };
-                        string[] arrRep = { "@", "3", "!", "0", "$" };
-
-                        found = CheckReplace(word, pass, arr, arrRep);
-                    }
-
-                    if (!found) {
-                        string[] arr =    { "a", "e", "i", "o", "s" };
-                        string[] arrRep = { "@", "3", "!", "0", "5" };
-
-                        found = CheckReplace(word, pass, arr, arrRep);
-                    }
-
-                    if (!found) {
-                        string[] arr =    { "at", "e", "i", "o", "s" };
-                        string[] arrRep = { "@", "3", "1", "0", "$" };
-
-                        found = CheckReplace(word, pass, arr, arrRep);
-                    }
-
-                    if (!found) {
-                        string[] arr =    { "at", "e", "i", "o", "s" };
-                        string[] arrRep = { "@", "3", "1", "0", "5" };
-
-                        found = CheckReplace(word, pass, arr, arrRep);
-                    }
-
-                    if (!found) {
-                        string[] arr =    { "at", "e", "i", "o", "s" };
-                        string[] arrRep = { "@", "3", "!", "0", "$" };
-
-                        found = CheckReplace(word, pass, arr, arrRep);
-                    }
-
-                    if (!found) {
-                        string[] arr =    { "at", "e", "i", "o", "s" };
-                        string[] arrRep = { "@", "3", "!", "0", "5" };
-
-                        found = CheckReplace(word, pass, arr, arrRep);
-                    }
-
-                    if (!found) {
-                        string[] arr =    { "and", "e", "i", "o", "s" };
-                        string[] arrRep = { "&", "3", "1", "0", "$" };
-
-                        found = CheckReplace(word, pass, arr, arrRep);
-                    }
-
-                    if (!found) {
-                        string[] arr =    { "and", "e", "i", "o", "s" };
-                        string[] arrRep = { "&", "3", "1", "0", "5" };
-
-                        found = CheckReplace(word, pass, arr, arrRep);
-                    }
-
-                    if (!found) {
-                        string[] arr =    { "and", "e", "i", "o", "s" };
-                        string[] arrRep = { "&", "3", "!", "0", "$" };
-
-                        found = CheckReplace(word, pass, arr, arrRep);
-                    }
-
-                    if (!found) {
-                        string[] arr =    { "and", "e", "i", "o", "s" };
-                        string[] arrRep = { "&", "3", "!", "0", "5" };
-
-                        found = CheckReplace(word, pass, arr, arrRep);
-                    }
-
-                    //Test with salt and alternated case
-                    /*if (!found) {
-                        found = CheckAlternateCase(word, pass);
-                    }
-
-                    //Test with salt and alternated case
-                    if (!found) {
-                        found = CheckAlternateCase(word, pass, false);
-                    }*/
-
                     //Test with salt and appended characters
                     if (!found) {
                         found = CheckAppended(word, pass);
@@ -192,11 +104,11 @@ namespace PasswordCracker {
                 //Check all special prepend cases
                 /*if (!found) {
                     found = CheckPrepended(word, passwords);
-                }
+                }*/
 
                 if (!found) {
                     found = CheckAppendAndPrepend(word, passwords);
-                }*/
+                }
             }
 
             //Orders passwords by timestamp

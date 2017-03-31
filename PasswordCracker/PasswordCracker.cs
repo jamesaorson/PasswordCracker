@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Linq;
 
 namespace PasswordCracker {
@@ -12,7 +11,7 @@ namespace PasswordCracker {
             = new Dictionary<string, string>();
         private static string[] dictWords;
         //Performs MD5 hashing.
-        private static MD5 md5 = MD5.Create();
+        private static MD5.MD5 md5 = new MD5.MD5();
         private static DateTime start;
 
         static void Main(string[] args) {
