@@ -10,7 +10,8 @@ namespace PasswordCracker {
             bool found = false;
 
             foreach (var word in dictWords) {
-                /*foreach (var pass in passwords) {
+                //Console.WriteLine(word);
+                foreach (var pass in passwords) {
                     found = false;
 
                     //Test normal dictionary search
@@ -91,11 +92,10 @@ namespace PasswordCracker {
                         found = CheckReplace(word, pass, arr, arrRep);
                     }
 
-                    //Test with salt and appended characters
                     if (!found) {
                         found = CheckAppended(word, pass);
                     }
-                }*/
+                }
                 //Check all special append cases
                 if (!found) {
                     found = CheckAppended(word, passwords);

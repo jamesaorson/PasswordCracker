@@ -20,14 +20,6 @@ namespace PasswordCracker
         }
 
         private static string Hash(string input) {
-           /* byte[] inputBytes;
-            byte[] hashBytes;
-
-            inputBytes = Encoding.ASCII.GetBytes(input);
-            hashBytes = md5.ComputeHash(inputBytes);
-
-            return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();*/
-
             var md5 = new MD5.MD5();
 
             md5.Value = input;
@@ -90,97 +82,9 @@ namespace PasswordCracker
         }
 
         private static string[] InitCommonAppends() {
-            string[] result = { "0", "1", "2", "3", "4", "5", "6", "7", "8",
-                                "9", "10", "11", "12", "123", "1234", "12345", "123456",
-                                "1234567", "12345678", "123456789", "01", "012", "0123",
-                                "01234", "012345", "0123456", "01234567", "012345678",
-                                "0123456789", "9876543210", "876543210", "76543210",
-                                "6543210", "543210", "43210", "3210", "210", "987654321",
-                                "87654321", "7654321", "654321", "54321", "4321", "321",
-                                "21", "!", "00", "21" };
+            string[] result = { "1", "!" };
 
             return result;
-        }
-
-        private static List<Password> ParseHashesFile(string filename) {
-            var reader = new StringReader(
-                File.ReadAllText(filename));
-            var passwords = new List<Password>();
-
-            while (reader.Peek() != -1) {
-                string line = reader.ReadLine();
-
-                if (line.Contains(":")) {
-                    int firstColonPos = line.IndexOf(':');
-                    int secondColonPos = line.Substring(firstColonPos + 1)
-                                        .IndexOf(':');
-
-                    passwords.Add(new Password(line.Substring(0, firstColonPos),
-                        line.Substring(firstColonPos + secondColonPos + 2),
-                        line.Substring(firstColonPos + 1, secondColonPos)));
-                }
-            }
-
-            return passwords;
-        }
-
-        private static string[] ReadAndSplitFile(string filename) {
-            string[] result = File.ReadAllText(filename).ToLower()
-                              .Split((string[])null,
-                               StringSplitOptions.RemoveEmptyEntries);
-            result = result.Distinct().ToArray();
-
-            for (int i = 0; i < result.Length; ++i) {
-                result[i] = result[i].Replace(".", "").Replace("?", "")
-                                     .Replace("!", "").Replace("(", "")
-                                     .Replace(")", "").Replace("[", "")
-                                     .Replace("]", "").Replace(",", "")
-                                     .Replace(";", "").Replace(":", "")
-                                     .Replace("'", "").Replace("\"", "")
-                                     .Replace("-", "");
-            }
-
-            result = result.Distinct().ToArray();
-
-            string text = "";
-
-            foreach (string word in result) {
-                text += word + "\n";
-            }
-
-            File.WriteAllText("./dict.txt", text);
-
-            return result.Distinct().ToArray();
-        }
-
-        private static void WriteOutputFile(List<Password> passwords,
-                                               string file) {
-            string result = string.Empty;
-
-            foreach(var pass in passwords) {
-                if (!String.IsNullOrEmpty(pass.Pass)) {
-                    string tempName = pass.Name;
-
-                    if (tempName.Length < 6) {
-                        for (int i = tempName.Length; i < 6; ++i) {
-                            tempName += " ";
-                        }
-                    }
-
-                    string tempPass = pass.Pass;
-
-                    if (tempPass.Length < 20) {
-                        for (int i = tempPass.Length; i < 20; ++i) {
-                            tempPass += " ";
-                        }
-                    }
-
-                    result += $"{tempName}:\t{tempPass}\t{pass.Time - start}\n";
-                }
-            }
-
-            File.WriteAllText(file, result);
-            Console.WriteLine($"Wrote the file in {DateTime.Now - start}");
         }
 
         private static string AlternateCase(string input,
@@ -340,7 +244,7 @@ namespace PasswordCracker
             string hashCheck;
             string titleHashCheck;
 
-            for (int i = 0; i <= 10000; ++i) {
+            for (int i = 0; i <= 2000; ++i) {
                 check.Append(i);
                 titleCheck.Append(i);
 
@@ -409,7 +313,7 @@ namespace PasswordCracker
             string hashCheck;
             string titleHashCheck;
 
-            for (int i = 0; i < 10000; ++i) {
+            for (int i = 0; i <= 2000; ++i) {
                 check.Insert(0, i);
                 titleCheck.Insert(0, i);
 
@@ -445,8 +349,8 @@ namespace PasswordCracker
             string hashCheck;
             string titleHashCheck;
 
-            for (int i = 0; i <= 100; ++i) {
-                for (int j = 0; j <= 100; ++j) {
+            for (int i = 17; i <= 20; ++i) {
+                for (int j = 0; j <= 99; ++j) {
                     check.Insert(0, i.ToString());
                     check.Append(j.ToString());
 
