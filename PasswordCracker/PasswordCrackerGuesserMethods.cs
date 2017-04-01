@@ -10,7 +10,7 @@ namespace PasswordCracker {
             bool found = false;
 
             foreach (var word in dictWords) {
-                foreach (var pass in passwords) {
+                /*foreach (var pass in passwords) {
                     found = false;
 
                     //Test normal dictionary search
@@ -95,16 +95,16 @@ namespace PasswordCracker {
                     if (!found) {
                         found = CheckAppended(word, pass);
                     }
-                }
+                }*/
                 //Check all special append cases
                 if (!found) {
                     found = CheckAppended(word, passwords);
                 }
 
                 //Check all special prepend cases
-                /*if (!found) {
+                if (!found) {
                     found = CheckPrepended(word, passwords);
-                }*/
+                }
 
                 if (!found) {
                     found = CheckAppendAndPrepend(word, passwords);
