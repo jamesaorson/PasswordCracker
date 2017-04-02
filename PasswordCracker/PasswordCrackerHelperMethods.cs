@@ -82,7 +82,7 @@ namespace PasswordCracker
         }
 
         private static string[] InitCommonAppends() {
-            string[] result = { "1", "!" };
+            string[] result = { "1", "!", "1234" };
 
             return result;
         }
@@ -244,7 +244,7 @@ namespace PasswordCracker
             string hashCheck;
             string titleHashCheck;
 
-            for (int i = 0; i <= 2000; ++i) {
+            for (int i = 0; i <= 100; ++i) {
                 check.Append(i);
                 titleCheck.Append(i);
 
@@ -313,7 +313,7 @@ namespace PasswordCracker
             string hashCheck;
             string titleHashCheck;
 
-            for (int i = 0; i <= 2000; ++i) {
+            for (int i = 1900; i <= 2000; ++i) {
                 check.Insert(0, i);
                 titleCheck.Insert(0, i);
 
@@ -349,13 +349,13 @@ namespace PasswordCracker
             string hashCheck;
             string titleHashCheck;
 
-            for (int i = 17; i <= 20; ++i) {
-                for (int j = 0; j <= 99; ++j) {
-                    check.Insert(0, i.ToString());
-                    check.Append(j.ToString());
+            for (int i = 32; i <= 124; ++i) {
+                for (int j = 32; j <= 124; ++j) {
+                    check.Insert(0, (char)i);
+                    check.Append((char)j);
 
-                    titleCheck.Insert(0, i.ToString());
-                    titleCheck.Append(j.ToString());
+                    titleCheck.Insert(0, (char)i);
+                    titleCheck.Append((char)j);
 
                     hashCheck = Hash(check.ToString());
                     titleHashCheck = Hash(titleCheck.ToString());
@@ -363,13 +363,13 @@ namespace PasswordCracker
                     foreach (var pass in passwords) {
                         if (String.IsNullOrEmpty(pass.Salt)) {
                             if (hashCheck.Equals(pass.HashString)) {
-                                Console.WriteLine(check); pass.Pass = check.ToString();
+                                pass.Pass = check.ToString();
                                 pass.Time = DateTime.Now;
 
                                 return true;
                             }
                             if (titleHashCheck.Equals(pass.HashString)) {
-                                Console.WriteLine(check); pass.Pass = titleCheck.ToString();
+                                pass.Pass = titleCheck.ToString();
                                 pass.Time = DateTime.Now;
 
                                 return true;
@@ -379,7 +379,7 @@ namespace PasswordCracker
 
                     check = new StringBuilder(word);
                     titleCheck = new StringBuilder(ToTitleCase(word));
-                }
+                }              
             }
 
             return false;
