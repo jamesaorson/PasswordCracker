@@ -52,7 +52,7 @@ namespace PasswordCracker {
                             found = CheckReplace(word, pass, "e", replaceDict["e"]);
                         }
 
-                        if (!found) {
+                        /*if (!found) {
                             found = CheckReplace(word, pass, "h", replaceDict["h"]);
                         }
 
@@ -66,7 +66,7 @@ namespace PasswordCracker {
 
                         if (!found) {
                             found = CheckReplace(word, pass, "o", replaceDict["o"]);
-                        }
+                        }*/
 
                         if (!found) {
                             found = CheckReplace(word, pass, "s", replaceDict["s"]);
